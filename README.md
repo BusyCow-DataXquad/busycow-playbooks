@@ -24,7 +24,7 @@ Each playbook is a self-contained package that includes:
 | Playbook | Category | Description | Status |
 |----------|----------|-------------|--------|
 | [lead-nurturing-crm](./lead-nurturing-crm/) | Sales Growth | 客戶關係管理 (CRM / Lead Nurturing) — Notion + Telegram | ✅ Ready |
-| [content-creation](./content-creation/) | Sales Growth | AI 內容生成 — 以公司知識庫為依據，生成品牌一致的行銷與業務內容 | ✅ Ready |
+| [content-intelligence](./content-intelligence/) | Sales Growth | AI 內容智慧系統 — 監控外部來源、主動建議主題、生成品牌一致內容 | ✅ Ready |
 
 ---
 
