@@ -1,4 +1,4 @@
-# Environment Variables — Litner Chain CIM
+# Environment Variables — Lead Nurturing CRM
 # Copy to ~/.hermes/.env and fill in all values
 
 # Notion

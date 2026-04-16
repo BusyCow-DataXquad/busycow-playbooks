@@ -42,7 +42,7 @@ A complete AI-powered CRM system for SMEs using Notion as the database and Teleg
 ### Step 4 — Install the Skill
 
 ```bash
-cp -r skills/productivity/litner-chain-cim ~/.hermes/skills/productivity/
+cp -r skills/productivity/lead-nurturing-crm ~/.hermes/skills/productivity/
 ```
 
 ### Step 5 — Configure
@@ -63,11 +63,11 @@ hermes cron create \
 ## Folder Structure
 
 ```
-litner-chain-cim/
+lead-nurturing-crm/
 ├── README.md
 ├── skills/
 │   └── productivity/
-│       └── litner-chain-cim/
+│       └── lead-nurturing-crm/
 │           └── SKILL.md          ← Core skill (install this)
 ├── notion-schema/
 │   └── README.md                 ← Database structure guide

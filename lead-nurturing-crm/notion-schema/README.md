@@ -1,4 +1,4 @@
-# Notion Schema — Litner Chain CIM
+# Notion Schema — Lead Nurturing CRM
 
 ## Overview
 
