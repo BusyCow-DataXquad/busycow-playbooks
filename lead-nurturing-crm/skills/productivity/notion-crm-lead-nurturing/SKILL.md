@@ -146,7 +146,7 @@ Activities data_source_id: {ID}
 查詢用 POST https://api.notion.com/v1/data_sources/{id}/query
 
 格式：
-📋 BusyCow CRM 日報 — {今天日期}
+📋 CRM 日報 — {今天日期}
 
 🔴 今日需跟進（Next Follow-up 到期）
 ⚠️ 停滯警示（超過 {N} 天沒有 Activity）
@@ -177,16 +177,16 @@ To enable email sending from the CRM context, set up Himalaya:
 curl -sSL https://raw.githubusercontent.com/pimalaya/himalaya/master/install.sh | PREFIX=~/.local sh
 
 # Config at ~/.config/himalaya/config.toml
-[accounts.busycow]
-email = "busycow@dataxquad.com"
-display-name = "BusyCow"
+[accounts.myagent]
+email = "your-email@yourdomain.com"
+display-name = "Your Agent Name"
 default = true
 
 backend.type = "imap"
 backend.host = "imap.gmail.com"
 backend.port = 993
 backend.encryption.type = "tls"
-backend.login = "busycow@dataxquad.com"
+backend.login = "your-email@yourdomain.com"
 backend.auth.type = "password"
 backend.auth.raw = "APP_PASSWORD_HERE"  # Gmail App Password (16 chars, no spaces)
 
@@ -194,7 +194,7 @@ message.send.backend.type = "smtp"
 message.send.backend.host = "smtp.gmail.com"
 message.send.backend.port = 587
 message.send.backend.encryption.type = "start-tls"
-message.send.backend.login = "busycow@dataxquad.com"
+message.send.backend.login = "your-email@yourdomain.com"
 message.send.backend.auth.type = "password"
 message.send.backend.auth.raw = "APP_PASSWORD_HERE"
 ```
@@ -202,7 +202,7 @@ message.send.backend.auth.raw = "APP_PASSWORD_HERE"
 Send email via pipe:
 ```bash
 cat << 'EOF' | ~/.local/bin/himalaya template send
-From: busycow@dataxquad.com
+From: your-email@yourdomain.com
 To: recipient@example.com
 Subject: Subject here
 
@@ -223,13 +223,13 @@ When operating as a CRM assistant in chat:
 Apply via PATCH /v1/blocks/{page_id}/children after creating each new Account page. All fields default to「（待填）」— the template doubles as a data collection checklist for the follow-up team.
 
 - **Part 1 — 客戶資料**: 客戶概況 table (公司名稱/產業/市場角色/地點/團隊規模/年營業額/利潤率/接洽人), 團隊組成 table (角色/人數/說明), 現有系統 (ERP/作業工具/溝通工具)
-- **Part 2 — Use Case 規劃**: Use Case 1 + Use Case 2, each with 現況流程/BusyCow解法/核心價值
+- **Part 2 — Use Case 規劃**: Use Case 1 + Use Case 2, each with 現況流程/解決方案/核心價值
 - **Part 3 — ROI 試算**: 人力成本明細 (月薪/每月總成本/年度成本) + 回本試算 (方案A初次部署/方案B初次+續約/第二年起)
 - **Part 4 — 潛在升級應用**: numbered list, blank
 
 ## Content Library: Mark as Sent + Log Activity
 
-When Hunter confirms a draft should be sent:
+When the user confirms a draft should be sent:
 1. Update Content Library page status to 已發送:
    ```bash
    PATCH /v1/pages/{page_id}  →  {"properties": {"Status": {"select": {"name": "已發送"}}}}
@@ -237,7 +237,7 @@ When Hunter confirms a draft should be sent:
 2. Create an Activity record (use `database_id`, not `data_source_id`):
    ```python
    payload = {
-       "parent": {"database_id": "74091aa3-ed1e-4110-a515-7649a41a3ec9"},
+       "parent": {"database_id": "YOUR_ACTIVITIES_DATABASE_ID"},
        "properties": {
            "Summary": {"title": [{"text": {"content": "跟進訊息發送｜{Account}｜{date}"}}]},
            "Type": {"select": {"name": "訊息"}},
@@ -249,7 +249,7 @@ When Hunter confirms a draft should be sent:
    ```
    Note: Activities title field is **Summary** (not Name). No "Notes" field — use "Client Response" or "Next Action" for text.
 
-3. Remind Hunter to manually copy-paste the message — Hermes cannot send WhatsApp/LINE directly.
+3. Remind the user to manually copy-paste the message — Hermes cannot send WhatsApp/LINE directly.
 
 ## Pitfalls
 
@@ -273,4 +273,4 @@ When Hunter confirms a draft should be sent:
 
 10. **Contacts → Company name lookup** — the `Company` field is a `relation` type. To get the company name, extract `relation[0].id` from the contact, then fetch `GET /v1/pages/{account_id}` and read `properties.Name.title[0].plain_text`.
 
-11. **Activities correct `database_id`** — the Activities `database_id` for page creation is `74091aa3-ed1e-4110-a515-7649a41a3ec9` (get it via `GET /v1/data_sources/565f21bd-e6b5-4c80-90c1-ea2869d0357a` → `parent.database_id`). The memory shorthand ending in `-4110` may be truncated — always verify via the data_source endpoint.
+11. **Activities correct `database_id`** — always retrieve the Activities `database_id` fresh via `GET /v1/data_sources/{YOUR_ACTIVITIES_DATA_SOURCE_ID}` → `parent.database_id`. Do not hardcode it — always verify via the data_source endpoint to avoid stale IDs.
