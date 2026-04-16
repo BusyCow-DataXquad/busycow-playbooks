@@ -10,11 +10,20 @@ Each playbook is a self-contained package that includes:
 
 ---
 
+## Playbook Categories
+
+| Category | Description |
+|----------|-------------|
+| **Sales Growth** | CRM, lead nurturing, outreach, pipeline management |
+| **Internal Ops** | Internal workflows, HR, finance, operations |
+| **External Ops** | Client-facing operations, delivery, support |
+| **Personal Tools** | Individual productivity, personal assistants |
+
 ## Available Playbooks
 
-| Playbook | Description | Status |
-|----------|-------------|--------|
-| [litner-chain-cim](./litner-chain-cim/) | CRM with Notion + Telegram for lead tracking and follow-up | ✅ Ready |
+| Playbook | Category | Description | Status |
+|----------|----------|-------------|--------|
+| [lead-nurturing-crm](./lead-nurturing-crm/) | Sales Growth | 客戶關係管理 (CRM / Lead Nurturing) — Notion + Telegram | ✅ Ready |
 
 ---
 

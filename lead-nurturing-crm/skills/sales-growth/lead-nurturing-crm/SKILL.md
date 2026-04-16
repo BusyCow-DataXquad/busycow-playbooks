@@ -1,5 +1,5 @@
 ---
-name: litner-chain-cim
+name: lead-nurturing-crm
 description: >
   Generic Lead Nurturing CRM skill for Hermes Agent.
   Covers conversational CRM (CRUD), automated daily reports,
@@ -10,7 +10,7 @@ author: BusyCow
 tags: [CRM, Lead Nurturing, Notion, Email, Telegram, Business Card]
 ---
 
-# Litner Chain CIM — Lead Nurturing CRM
+# Lead Nurturing CRM — 客戶關係管理
 
 ## Overview
 
