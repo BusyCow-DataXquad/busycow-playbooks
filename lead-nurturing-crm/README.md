@@ -1,4 +1,4 @@
-# Litner Chain CIM — Lead Nurturing CRM
+# Lead Nurturing CRM
 
 A complete AI-powered CRM system for SMEs using Notion as the database and Telegram as the daily interface.
 
