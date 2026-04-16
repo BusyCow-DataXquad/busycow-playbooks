@@ -1,0 +1,18 @@
+# BusyCow Lead Nurturing CRM — Config Template
+# Copy this to ~/.hermes/config.yaml and fill in your values
+
+platforms:
+  - type: telegram
+    token: "YOUR_TELEGRAM_BOT_TOKEN"
+    extra:
+      require_mention: true          # In groups, only respond when @mentioned
+
+# Environment variables (add to ~/.hermes/.env)
+# NOTION_TOKEN=your_notion_integration_token
+# NOTION_ACCOUNTS_DB=your_accounts_database_id
+# NOTION_CONTACTS_DB=your_contacts_database_id
+# NOTION_ACTIVITIES_DB=your_activities_database_id
+
+# Cron: Daily report (adjust time to your timezone)
+# Run: hermes cron create --schedule "0 1 * * *" --prompt "Generate daily CRM report"
+# Deliver to: telegram:-100XXXXXXXXX:THREAD_ID
