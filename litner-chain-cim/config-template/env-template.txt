@@ -1,0 +1,13 @@
+# Environment Variables — Litner Chain CIM
+# Copy to ~/.hermes/.env and fill in all values
+
+# Notion
+NOTION_API_KEY=your_notion_integration_token
+NOTION_ACCOUNTS_DB=your_accounts_database_id
+NOTION_CONTACTS_DB=your_contacts_database_id
+NOTION_ACTIVITIES_DB=your_activities_database_id
+NOTION_CONTENT_LIBRARY_DB=your_content_library_database_id
+
+# Email (for bulk outreach)
+# If using Gmail via Himalaya, configure ~/.config/himalaya/config.toml
+# EMAIL_FROM=your@email.com

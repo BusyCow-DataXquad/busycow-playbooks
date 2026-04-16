@@ -14,7 +14,7 @@ Each playbook is a self-contained package that includes:
 
 | Playbook | Description | Status |
 |----------|-------------|--------|
-| [lead-nurturing-crm](./lead-nurturing-crm/) | CRM with Notion + Telegram for lead tracking and follow-up | ✅ Ready |
+| [litner-chain-cim](./litner-chain-cim/) | CRM with Notion + Telegram for lead tracking and follow-up | ✅ Ready |
 
 ---
 
