@@ -10,6 +10,14 @@ Each playbook is a self-contained package that includes:
 
 ---
 
+## ⚡ Start Here — Required for All Playbooks
+
+| Playbook | Description |
+|----------|-------------|
+| [business-core-kb](./business-core-kb/) | **Business Core KB — mandatory foundation. Install this first before any other playbook.** Defines who the business is, who it serves, what it sells, how it makes money, and how it runs. |
+
+---
+
 ## Playbook Categories
 
 | Category | Description |
