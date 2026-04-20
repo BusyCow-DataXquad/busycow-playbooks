@@ -176,7 +176,77 @@ These rules define how the agent must behave in all CRM interactions.
 - Do NOT ask the user to open Notion or enter data manually
 - If the user says "just talked to [Name]", create an Activity and ask for details
 
-### 2. Proactive Field Completion
+### 2. Deal Page Template — Auto-Apply on Creation
+
+Every time a new Deal page is created in the Deals database, immediately write the following
+structured template into the page body (blocks). Do this automatically — do not ask the user
+to fill it in manually.
+
+The template structure:
+
+```
+# Part 1 — 客戶資料
+
+## 📋 客戶概況
+[table: 2 cols, header row]
+| 欄位       | 內容   |
+| 公司名稱   | （待填）|
+| 產業       | （待填）|
+| 規模       | （待填）|
+| 地區       | （待填）|
+| 網站       | （待填）|
+| 介紹人     | （待填）|
+
+## 👥 團隊組成
+[table: 3 cols, header row]
+| 姓名 | 職稱 | 角色 |
+| （待填）| （待填）| Decision Maker / Influencer / Executor |
+
+## 🖥️ 現有系統
+- ERP：（待確認）
+- 日常作業工具：（待填）
+- 溝通工具：（待填）
+
+---
+
+# Part 2 — Use Case 規劃
+
+## Use Case 1 — （待填）
+- 現況流程：（待填）
+- BCC 解法：（待填）
+- 核心價值：（待填）
+
+## Use Case 2 — （待填）
+- （待填）
+
+---
+
+# Part 3 — ROI 試算
+
+## 人力成本試算
+- 月薪：（待填）
+- 每月人力總成本（含勞健保勞退）：（待填）
+- 年度人力成本：（待填）
+
+## 回本試算
+- 方案 A（初次部署）：回本時間 / 年度淨省 / ROI（待填）
+- 方案 B（初次部署 + 續約）：回本時間 / 年度淨省 / ROI（待填）
+- 第二年起：年度淨省 / ROI（待填）
+
+---
+
+# Part 4 — 潛在升級應用
+1. （待填）
+```
+
+**Rules:**
+- Write this template immediately after the Deal page is created, before returning to the user
+- Use the Notion API to append blocks to the new Deal's page_id
+- Tables must be created with `table` blocks containing `table_row` children
+- If the user provides client info at the time of Deal creation (company name, team size, etc.), pre-fill the relevant fields instead of leaving them as （待填）
+- After writing the template, confirm to the user: 「Deal 已建立，客戶追蹤模板已套用。」
+
+### 3. Proactive Field Completion
 
 When adding a new Account or Activity, always check for missing required fields and ask for them before saving:
 
