@@ -30,10 +30,12 @@ Before activating this skill, the client must provide:
 | Item | Description |
 |------|-------------|
 | `NOTION_TOKEN` | Notion integration API key |
-| Accounts DB ID | The database tracking companies/leads |
-| Contacts DB ID | The database tracking individual contacts |
-| Activities DB ID | The database tracking every interaction |
-| Content Library DB ID | The database storing email/message templates |
+| Accounts DB ID | Fact Layer — companies and organizations |
+| Contacts DB ID | Fact Layer — individual people |
+| Deals DB ID | Relationship Layer — sales pipeline opportunities |
+| Partnership DB ID | Relationship Layer — resellers and partners |
+| Activities DB ID | Record Layer — every interaction logged here |
+| Content Library DB ID | Templates and follow-up drafts |
 | `TELEGRAM_BOT_TOKEN` | Bot token for the daily report |
 | Telegram Chat ID + Thread ID | Where to deliver the daily report |
 | Email account | Gmail or SMTP credentials for sending |
@@ -47,16 +49,36 @@ Store all secrets in `~/.hermes/.env`. Reference them by name in this skill.
 > Each client's exact fields may differ. The schema below defines the **minimum recommended structure**.
 > During onboarding, ask the client which fields they want to track and adjust accordingly.
 
-### Accounts (Companies / Leads)
+### Architecture: 3-Layer Data Model
+
+```
+┌─────────────────────────────────────────────────────┐
+│  FACT LAYER — Who exists                            │
+│  Accounts (companies)   Contacts (people)           │
+└───────────────┬────────────────────┬────────────────┘
+                │                    │
+┌───────────────▼────────────────────▼────────────────┐
+│  RELATIONSHIP LAYER — How they connect to us        │
+│  Deals (pipeline)       Partnership (resellers)     │
+└───────────────┬────────────────────┬────────────────┘
+                │                    │
+┌───────────────▼────────────────────▼────────────────┐
+│  RECORD LAYER — What happened                       │
+│  Activities (every interaction logged here)         │
+└─────────────────────────────────────────────────────┘
+
+  Content Library (standalone — templates & drafts)
+```
+
+### Accounts (Fact Layer — Companies)
 
 | Field | Type | Notes |
 |-------|------|-------|
 | Name | Title | Company name |
-| Stage | Status / Select | e.g. Lead → Qualified → Closing → Customer → Lost |
 | Industry | Select | Client-defined |
-| Country / Region | Select | Client-defined |
-| Est. Value | Number | Expected contract value |
-| Next Follow-up | Date | When to contact next |
+| Country | Select | Client-defined |
+| Company Size | Select | 1–10 / 11–50 / 51–200 / 200+ |
+| Source | Select | Referral / Outbound / Event / Inbound / Ad |
 | Owner | People | Assigned salesperson |
 | Website | URL | |
 | Notes | Rich Text | |
@@ -65,20 +87,57 @@ Recommended rollups from Activities (set up after relations are configured):
 - Last Activity Date (function: latest_date)
 - Activity Count (function: count)
 
-### Contacts (People)
+### Contacts (Fact Layer — People)
 
 | Field | Type | Notes |
 |-------|------|-------|
 | Name | Title | Person's name |
 | Job Title | Rich Text | |
-| Account | Relation → Accounts | Which company |
+| Company | Relation → Accounts | Which company |
 | Email | Email | |
-| Phone | Phone Number | |
+| Phone / WhatsApp | Phone Number | Primary contact number |
+| WhatsApp | Phone Number | If different from above |
+| LINE ID | Rich Text | |
+| LinkedIn | URL | |
 | Decision Role | Select | Decision Maker / Influencer / Executor |
 | Preferred Channel | Select | Email / WhatsApp / LINE / Phone |
 | Notes | Rich Text | How we met, referral info, etc. |
 
-### Activities (Interaction Log)
+### Deals (Relationship Layer — Pipeline)
+
+Tracks sales opportunities. One company can have multiple deals.
+
+| Field | Type | Notes |
+|-------|------|-------|
+| Name | Title | Deal name / opportunity description |
+| Account | Relation → Accounts | Which company |
+| Stage | Status | Lead → Qualified → Closing → Won → Lost |
+| Est. Value | Number | Expected contract value |
+| Source | Select | Referral / Outbound / Event / Inbound / Ad |
+| Next Action | Rich Text | What to do next |
+| Next Follow-up | Date | When to follow up |
+| Owner | People | Assigned salesperson |
+| Notes | Rich Text | |
+
+### Partnership (Relationship Layer — Resellers & Partners)
+
+Tracks resellers, referral partners, and strategic partners. A partner can simultaneously be an Account.
+
+| Field | Type | Notes |
+|-------|------|-------|
+| Name | Title | Partner / organization name |
+| Type | Select | Reseller / Referral / Strategic / Distributor |
+| Status | Status | Active / Inactive / Prospect |
+| Country | Multi-select | Markets they cover |
+| Email | Email | Primary contact email |
+| Phone | Phone Number | |
+| Related to Accounts | Relation → Accounts | If also an Account (dual role) |
+| Related to Contacts | Relation → Contacts | Key contact person at the partner |
+| Remarks | Rich Text | Notes about the partnership |
+
+### Activities (Record Layer — Interaction Log)
+
+Every customer interaction is logged here — the single source of truth for what happened.
 
 | Field | Type | Notes |
 |-------|------|-------|
@@ -91,6 +150,7 @@ Recommended rollups from Activities (set up after relations are configured):
 | Next Action | Rich Text | What to do next |
 | Stage Advanced? | Checkbox | Did this move the deal forward? |
 | Owner | People | Who handled this |
+| Created | Created Time | Auto-filled |
 
 ### Content Library (Templates & Drafts)
 
@@ -299,7 +359,7 @@ When deploying for a new client, ask the following questions and update the skil
 | Question | Why it matters |
 |----------|----------------|
 | What are your pipeline stages? | Update Stage options in Accounts |
-| Do you have resellers / partners separate from customers? | May need a Partner table |
+| Do you have resellers / partners separate from customers? | Partnership table is already included — configure Type and Status options |
 | Which industries do you serve? | Update Industry select options |
 | Which channels do you use most? (WhatsApp, Email, LINE?) | Affects Preferred Channel and Content Library |
 | Do you want daily reports? What time? | Set up cron job |
@@ -323,10 +383,20 @@ Fill in this section after client onboarding:
 # Client: [CLIENT NAME]
 # Configured: [DATE]
 
-NOTION_TOKEN=             # from ~/.hermes/.env
+NOTION_TOKEN=*** from ~/.hermes/.env
+
+# Fact Layer
 ACCOUNTS_DB=              # Notion database ID
 CONTACTS_DB=              # Notion database ID
+
+# Relationship Layer
+DEALS_DB=                 # Notion database ID
+PARTNERSHIP_DB=           # Notion database ID
+
+# Record Layer
 ACTIVITIES_DB=            # Notion database ID
+
+# Content
 CONTENT_LIBRARY_DB=       # Notion database ID
 
 TELEGRAM_CHAT_ID=         # e.g. -100XXXXXXXXX
