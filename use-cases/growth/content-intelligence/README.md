@@ -1,8 +1,6 @@
 # Content Intelligence — Use Case
 
-An AI-powered content system that monitors external sources, proactively suggests topics,
-and generates on-brand content grounded in your company's knowledge base.
-All content is saved automatically to the Notion Content Library.
+An AI-powered content system that helps you find the right sources, get daily topic suggestions, and generate on-brand content — all grounded in your company's knowledge base and saved automatically to Notion.
 
 **Category:** Growth
 **Data Foundation Required:** [Growth](../../data-foundation/growth/README.md) — Content Library only
@@ -11,12 +9,14 @@ All content is saved automatically to the Notion Content Library.
 
 ## What This Use Case Does
 
-- On-demand content generation (Email, WhatsApp, Blog, LinkedIn, Case Study, and more)
-- External source monitoring (blogs, news, newsletters) as content inspiration
-- Agent-suggested new sources — with user approval before adding
-- Daily or weekly content briefing to Telegram with topic recommendations
-- Auto-save to Notion Content Library with metadata
-- Batch generation for full content calendars
+### Feature 1 — Source Discovery
+Reads your Core Business KB (brand positioning, TA, industry focus) and recommends external blogs, news sites, and newsletters worth tracking as writing inspiration. Suggestions are presented for your approval before being added to the Sources DB. You can also add sources manually at any time.
+
+### Feature 2 — Daily Topic Briefing
+Every morning at 9am (alongside the Daily CRM Report), the agent scans Active Sources for fresh articles, cross-references your brand KB and target audience, then delivers 3–5 specific topic suggestions — each with a recommended format and angle. Reply "寫第 1 個" to start writing immediately.
+
+### Feature 3 — Content Writing
+Generate any type of content through natural conversation: long-form Blog posts, Social Media posts (LinkedIn, IG, Facebook), Email campaigns, WhatsApp messages, and more. The agent always references the brand KB to ensure tone and positioning consistency. All confirmed content is saved to the Content Library with metadata.
 
 ---
 
@@ -28,21 +28,21 @@ Install these tables from `data-foundation/growth/` before activating this use c
 |-------|-------|---------|
 | Content Library | Standalone | Stores all generated content |
 
-> **Also required (created separately):** Sources DB — tracks external sources to monitor
+> **Also required (create separately):** Sources DB — tracks external sources to monitor. Schema below.
 
 **Sources DB schema:**
 
 | Field | Type | Notes |
 |-------|------|-------|
-| Name | Title | Source name |
-| URL | URL | |
-| Type | Select | Blog / News / Newsletter / Competitor / Industry Report |
+| Name | Title | Source name (e.g. "Tech in Asia") |
+| URL | URL | Homepage or RSS feed URL |
+| Type | Select | Blog / News / Newsletter / Industry Report |
 | Topics | Multi-select | Content themes covered |
 | Language | Select | en / zh-TW / zh-HK / etc. |
 | Status | Select | Active / Paused |
 | Added By | Select | User / Agent Suggested |
-| Last Fetched | Date | |
-| Notes | Rich Text | |
+| Last Fetched | Date | Auto-updated by agent |
+| Notes | Rich Text | Why this source is relevant |
 
 ---
 
@@ -53,7 +53,7 @@ Ensure the following are filled in and accessible:
 
 | KB Document | Why It's Needed |
 |-------------|----------------|
-| Brand Identity | Sets tone, voice, and boundaries for all content |
+| Brand Identity | Sets tone, voice, and positioning for all content |
 | Target Audience | Informs who the content is written for |
 | Offer | Grounds product/service mentions in accurate detail |
 
@@ -82,30 +82,39 @@ cp -r skills/growth/content-intelligence ~/.hermes/skills/growth/
 
 ```bash
 cat config-template/env-template.txt >> ~/.hermes/.env
-# Fill in all values
+# Fill in NOTION_TOKEN, SOURCES_DB, CONTENT_LIBRARY_DB, KB page IDs
 ```
 
-### Step 5 — Set Up Briefing (Optional)
+### Step 5 — Set Up Daily Briefing (Optional)
 
-The agent will guide you through setting up the weekly/daily cron job on first run.
+The agent will guide you through setting up the daily cron job on first run, or you can set it up manually:
+
+```bash
+# Daily 9am Taiwan time (01:00 UTC)
+hermes cron create \
+  --schedule "0 1 * * *" \
+  --name "content-intelligence-daily" \
+  --prompt "Run the Content Intelligence daily briefing: scan Active Sources, suggest 3-5 topics grounded in KB, deliver to Telegram."
+```
 
 ---
 
 ## How to Use
 
-**Generate content on demand:**
-- 「幫我寫一封開發信給製造業的客戶」
-- 「寫一篇 LinkedIn 文，主題是 AI 如何幫業務節省時間」
-- 「根據最新的 Tech in Asia 文章，寫一篇我們的觀點」
-
-**Manage sources:**
-- 「幫我追蹤 Tech in Asia 的文章」
-- 「有沒有推薦的新來源？」
+**Discover sources:**
+- 「你覺得我們應該追蹤哪些外部來源？」
+- 「加一個新來源：https://example.com」
 - 「暫停追蹤 HBR」
 
-**Act on weekly briefing:**
+**Act on daily briefing:**
 - 「寫第 1 個」
 - 「寫第 2 個，改成 Email 格式」
+- 「第 3 個先存草稿標題，下週再寫」
+
+**Write content on demand:**
+- 「幫我寫一篇 LinkedIn 文，主題是 AI 如何幫業務節省時間」
+- 「根據今天的 Tech in Asia，寫一篇我們的觀點文章」
+- 「幫我準備這個月的 Lead 開發素材，Email + WhatsApp 各一篇」
 
 ---
 
