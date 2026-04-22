@@ -1,0 +1,10 @@
+# Notion
+NOTION_TOKEN=                         # Notion integration token (from notion.so/my-integrations)
+
+# HR Databases — get IDs from Notion URL (32-char hex after last /)
+HR_EMPLOYEES_DB=                      # 員工名冊 DB ID
+HR_ATTENDANCE_DB=                     # 出勤紀錄 DB ID
+HR_LEAVE_DB=                          # 請假紀錄 DB ID
+HR_ANNUAL_LEAVE_DB=                   # 年假管理 DB ID
+HR_PAYROLL_DB=                        # 薪酬發放紀錄 DB ID
+HR_EXPENSE_DB=                        # 報帳請款紀錄 DB ID
