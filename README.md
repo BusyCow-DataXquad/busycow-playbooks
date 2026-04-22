@@ -51,7 +51,8 @@ busycow-playbooks/
 │   │           └── env-template.txt
 │   └── external-ops/
 │       ├── inventory-management/
-│       └── ar-collections/
+│       ├── ar-collections/
+│       └── project-management/
 │           ├── README.md
 │           ├── SETUP.md
 │           ├── SKILL.md
@@ -94,6 +95,7 @@ Every use case folder contains three files:
 |----------|-------------|
 | [Inventory Management](./use-cases/external-ops/inventory-management/) | Log inbound and outbound shipments via conversation, auto-update stock levels, analyze dealer performance and sales trends |
 | [AR Collections](./use-cases/external-ops/ar-collections/) | Automate the full debt collection SOP — daily schedule triggers the right message at the right stage, logs every interaction, and escalates to the owner only when a decision is needed |
+| [Project Management](./use-cases/external-ops/project-management/) | Give every project a structured home — auto-apply templates on opening, capture discussions and action items in plain language, daily status reports, and auto-alerts for stalled or overdue items |
 
 ### Internal Ops
 
