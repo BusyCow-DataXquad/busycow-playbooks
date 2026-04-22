@@ -1,0 +1,11 @@
+# Discussion & Todo Tracker — Config Template
+
+# Internal Ops DB IDs (from Notion)
+DISCUSSIONS_DB_ID=your_internal_discussions_database_id_here
+TASKS_DB_ID=your_task_tracker_database_id_here
+
+# Business Core KB Page IDs (for auto-update function)
+# These are the same as your Core Business KB pages
+BRAND_POSITIONING_PAGE_ID=your_brand_positioning_page_id_here
+TA_ANALYSIS_PAGE_ID=your_ta_analysis_page_id_here
+PRICING_BUSINESS_PAGE_ID=your_pricing_business_page_id_here

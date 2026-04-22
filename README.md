@@ -2,30 +2,46 @@
 
 Reusable AI agent use cases for SMEs — packaged for fast client deployment.
 
-Each use case is a self-contained module that includes:
-- **Skills** — Hermes skill files that teach the agent how to operate
-- **README** — what it does, required data tables, and setup steps
-- **Config Template** — settings to fill in (tokens, IDs, chat IDs)
-
-Data tables are shared across use cases and live separately in `data-foundation/`.
+Each playbook is a self-contained module that teaches a Hermes agent how to handle a specific business function. Clients pick only what they need. Nothing more, nothing less.
 
 ---
 
-## How It Works
+## What's Inside
 
 ```
-data-foundation/          ← Shared data — install once, used by many use cases
-  core-business/          ← Business KB (brand, audience, offer, model, ops)
-  growth/                 ← CRM tables (Accounts, Contacts, Activities, etc.)
+data-foundation/              ← Shared data layer — install once, used across use cases
+  core-business/              ← Business KB: brand, audience, offer, model, ops
+  growth/                     ← CRM tables: Accounts, Contacts, Activities, etc.
+  internal-ops/               ← Internal tables: Discussions, Tasks, HR, Finance
 
-use-cases/                ← Pick and install what the client needs
+use-cases/                    ← Business applications — pick what the client needs
   growth/
-    lead-nurturing/
-    content-intelligence/
+    lead-nurturing/           ← CRM, pipeline, daily briefing, bulk outreach
+    content-intelligence/     ← Source monitoring, content generation
+  internal-ops/
+    discussion-todo-tracker/  ← Meeting notes, todo extraction, business core updates
+
+skills/                       ← Infrastructure skills for advanced deployments
+  autonomous-ai-agents/
+    team-gbrain/              ← Shared knowledge brain for multi-agent teams
+    team-gstack/              ← Shared infra orchestration for multi-agent teams
 ```
 
-Clients select use cases. Each use case README tells you which data tables to install.
-You never install more than what's needed.
+---
+
+## Architecture
+
+Every deployment starts with **Core Business KB** — 5 documents that tell the agent who the company is, who they serve, and how they operate. Without this, no use case works well.
+
+On top of that, clients install the **data tables** their use cases need, then install the **skills** that run those use cases.
+
+```
+Core Business KB  (always required)
+       ↓
+Data Foundation   (install only what your use cases need)
+       ↓
+Use Cases         (pick from the menu below)
+```
 
 ---
 
@@ -33,21 +49,23 @@ You never install more than what's needed.
 
 ### Core Business KB
 
-Required by all use cases. Fill this in first.
+Required by all use cases. Fill these in before anything else.
 
-| Document | What it answers |
-|----------|----------------|
-| Brand Identity | Who we are, what we stand for, how we sound |
-| Target Audience | Who we're building for, their real problem |
-| Offer | What exactly we sell, what the customer gets |
+| Document | What it covers |
+|----------|---------------|
+| Brand Identity | Who we are, what we stand for, tone and voice |
+| Target Audience | Who we're building for, their real pain |
+| Offer | What we sell, what the customer gets |
 | Business Model | How we make money, how deals get done |
-| Operations | How the business actually runs day-to-day |
+| Operations | How the business runs day-to-day |
 
-→ [Setup instructions](./data-foundation/core-business/README.md)
+→ [Setup guide](./data-foundation/core-business/README.md)
 
-### Growth Data
+---
 
-Shared tables for all Growth use cases.
+### Growth Data Tables
+
+Shared across all Growth use cases.
 
 | Table | Layer | Used By |
 |-------|-------|---------|
@@ -58,7 +76,20 @@ Shared tables for all Growth use cases.
 | Partnership | Relationship | Partner Nurturing |
 | Content Library | Standalone | Lead Nurturing, Content Intelligence |
 
-→ [Setup instructions](./data-foundation/growth/README.md)
+→ [Setup guide](./data-foundation/growth/README.md)
+
+---
+
+### Internal Ops Data Tables
+
+Shared across all Internal Ops use cases.
+
+| Table | Layer | Used By |
+|-------|-------|---------|
+| Internal Discussions | Record | Discussion & Todo Tracker |
+| Task Tracker | Record | Discussion & Todo Tracker |
+
+→ [Setup guide](./data-foundation/internal-ops/README.md)
 
 ---
 
@@ -66,42 +97,66 @@ Shared tables for all Growth use cases.
 
 ### Growth
 
-| Use Case | Description | Required Tables |
-|----------|-------------|----------------|
-| [Lead Nurturing](./use-cases/growth/lead-nurturing/) | AI-powered CRM — log interactions, track pipeline, daily briefing, bulk outreach | Accounts, Contacts, Activities, Deals, Content Library |
-| [Content Intelligence](./use-cases/growth/content-intelligence/) | Monitor sources, generate on-brand content, save to Content Library | Content Library, Sources DB |
+| Use Case | What it does | Required Tables |
+|----------|-------------|-----------------|
+| [Lead & Partners Nurturing](./use-cases/growth/lead-nurturing/) | Conversational CRM — log activities, track pipeline, daily briefing, draft follow-up messages | Accounts, Contacts, Activities, Deals, Partnership, Content Library |
+| [Content Intelligence](./use-cases/growth/content-intelligence/) | Monitor sources, extract insights, generate on-brand content, save to library | Content Library, Sources DB |
+
+### Internal Ops
+
+| Use Case | What it does | Required Tables |
+|----------|-------------|-----------------|
+| [Discussion & Todo Tracker](./use-cases/internal-ops/discussion-todo-tracker/) | Log meetings in plain language, extract todos and open issues, auto-update Business Core when strategy shifts | Internal Discussions, Task Tracker |
 
 ---
 
 ## Installation
 
-### 1. Set up Core Business KB
+### 1. Fill in Core Business KB
 
 ```bash
-# Fill in the templates and add page IDs to ~/.hermes/.env
+# Edit the 5 templates, then add page IDs to ~/.hermes/.env
 # See data-foundation/core-business/README.md
 ```
 
-### 2. Create required Notion databases
+### 2. Create the required Notion databases
 
 ```bash
-# Follow data-foundation/growth/README.md
-# Only create the tables your selected use cases need
+# Follow the relevant data-foundation README
+# Only create tables your selected use cases need
 ```
 
 ### 3. Install the skill(s)
 
 ```bash
-# Example: Lead Nurturing
-cp -r use-cases/growth/lead-nurturing/skills/growth/lead-nurturing ~/.hermes/skills/growth/
+# Example: Lead & Partners Nurturing
+cp -r use-cases/growth/lead-nurturing/skills/growth/lead-nurturing \
+      ~/.hermes/skills/growth/
+
+# Example: Discussion & Todo Tracker
+cp -r use-cases/internal-ops/discussion-todo-tracker/skills/internal-ops/discussion-todo-tracker \
+      ~/.hermes/skills/internal-ops/
 ```
 
 ### 4. Configure
 
 ```bash
+# Copy the env template and fill in your values
 cat use-cases/growth/lead-nurturing/config-template/env-template.txt >> ~/.hermes/.env
-# Fill in all values
 ```
+
+---
+
+## Infrastructure Skills
+
+These are not use cases — they're building blocks for teams running multiple agents.
+
+| Skill | What it does |
+|-------|-------------|
+| [team-gbrain](./skills/autonomous-ai-agents/team-gbrain/) | Shared knowledge brain — agents read/write a common GBrain instance |
+| [team-gstack](./skills/autonomous-ai-agents/team-gstack/) | Shared infra — agents coordinate on a common GStack environment |
+
+Install these when deploying Hermes across a team, not for single-user setups.
 
 ---
 
