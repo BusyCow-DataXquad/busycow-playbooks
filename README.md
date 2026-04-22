@@ -18,10 +18,16 @@ busycow-playbooks/
 │
 ├── use-cases/                    ← Pick what the client needs — each is self-contained
 │   ├── growth/
-│   │   ├── lead-nurturing/
+│   │   ├── customer-relationship/
 │   │   │   ├── README.md         ← What it does, schema overview, example interactions
 │   │   │   ├── SETUP.md          ← Agent runs this once to set up the client's workspace
 │   │   │   ├── SKILL.md          ← Agent uses this daily — behavioral rules and logic
+│   │   │   └── config-template/
+│   │   │       └── env-template.txt
+│   │   ├── partner-management/
+│   │   │   ├── README.md
+│   │   │   ├── SETUP.md
+│   │   │   ├── SKILL.md
 │   │   │   └── config-template/
 │   │   │       └── env-template.txt
 │   │   └── content-intelligence/
@@ -86,7 +92,8 @@ Every use case folder contains three files:
 
 | Use Case | What it does |
 |----------|-------------|
-| [Lead & Partners Nurturing](./use-cases/growth/lead-nurturing/) | Conversational CRM — log activities, track pipeline, daily briefing, draft follow-up messages, import business cards |
+| [Customer Relationship](./use-cases/growth/customer-relationship/) | Manage the full customer lifecycle from lead qualification to long-term retention — ICP scoring, rhythm-based follow-up, daily briefing, bulk outreach, business card import |
+| [Partner Management](./use-cases/growth/partner-management/) | Manage the full partner lifecycle from qualification to performance monitoring — onboarding tracking, monthly performance review, check-in reminders, co-marketing content matching |
 | [Content Intelligence](./use-cases/growth/content-intelligence/) | Monitor sources, extract insights, generate on-brand content, save to content library |
 
 ### External Ops
