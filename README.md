@@ -30,20 +30,27 @@ busycow-playbooks/
 │   │       ├── SKILL.md
 │   │       └── config-template/
 │   │           └── env-template.txt
-│   └── internal-ops/
-│       ├── hr-management/
-│       │   ├── README.md
-│       │   ├── SETUP.md
-│       │   ├── SKILL.md
-│       │   └── config-template/
-│       │       └── env-template.txt
-│       ├── financial-intelligence/
-│       │   ├── README.md
-│       │   ├── SETUP.md
-│       │   ├── SKILL.md
-│       │   └── config-template/
-│       │       └── env-template.txt
-│       └── discussion-todo-tracker/
+│   ├── internal-ops/
+│   │   ├── hr-management/
+│   │   │   ├── README.md
+│   │   │   ├── SETUP.md
+│   │   │   ├── SKILL.md
+│   │   │   └── config-template/
+│   │   │       └── env-template.txt
+│   │   ├── financial-intelligence/
+│   │   │   ├── README.md
+│   │   │   ├── SETUP.md
+│   │   │   ├── SKILL.md
+│   │   │   └── config-template/
+│   │   │       └── env-template.txt
+│   │   └── discussion-todo-tracker/
+│   │       ├── README.md
+│   │       ├── SETUP.md
+│   │       ├── SKILL.md
+│   │       └── config-template/
+│   │           └── env-template.txt
+│   └── external-ops/
+│       └── inventory-management/
 │           ├── README.md
 │           ├── SETUP.md
 │           ├── SKILL.md
@@ -79,6 +86,12 @@ Every use case folder contains three files:
 |----------|-------------|
 | [Lead & Partners Nurturing](./use-cases/growth/lead-nurturing/) | Conversational CRM — log activities, track pipeline, daily briefing, draft follow-up messages, import business cards |
 | [Content Intelligence](./use-cases/growth/content-intelligence/) | Monitor sources, extract insights, generate on-brand content, save to content library |
+
+### External Ops
+
+| Use Case | What it does |
+|----------|-------------|
+| [Inventory Management](./use-cases/external-ops/inventory-management/) | Log inbound and outbound shipments via conversation, auto-update stock levels, analyze dealer performance and sales trends |
 
 ### Internal Ops
 

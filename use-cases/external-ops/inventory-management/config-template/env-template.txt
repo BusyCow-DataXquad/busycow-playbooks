@@ -1,0 +1,34 @@
+# Environment Variable Template — Inventory Management Use Case
+# Copy the relevant lines into ~/.hermes/.env and fill in all values.
+# Do not leave placeholder text in the actual .env file.
+# Do not commit .env files to version control.
+
+# ------------------------------------------------------------
+# Notion API
+# ------------------------------------------------------------
+
+# Your Notion integration token.
+# Create one at: https://www.notion.so/my-integrations
+# Grant it read/write access to the workspace containing the inventory databases.
+NOTION_TOKEN=your_notion_integration_token_here
+
+# ------------------------------------------------------------
+# Inventory Management — Database IDs
+# ------------------------------------------------------------
+# To find a database ID: open the database in Notion, copy the URL.
+# The ID is the 32-character string in the URL before the "?" character.
+# Example URL: https://www.notion.so/myworkspace/abc123...def456?v=...
+# Example ID: abc123def456... (formatted as xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)
+
+# Product Catalog — single source of truth for all stock numbers.
+# This table must exist before all others. Set this ID first.
+INV_MGMT_PRODUCT_CATALOG_DB_ID=your_product_catalog_database_id_here
+
+# Dealer List — master record of all reseller/dealer partners.
+INV_MGMT_DEALER_LIST_DB_ID=your_dealer_list_database_id_here
+
+# Outbound Records — every shipment logged here.
+INV_MGMT_OUTBOUND_RECORDS_DB_ID=your_outbound_records_database_id_here
+
+# Inbound Records — every purchase order and goods receipt logged here.
+INV_MGMT_INBOUND_RECORDS_DB_ID=your_inbound_records_database_id_here
