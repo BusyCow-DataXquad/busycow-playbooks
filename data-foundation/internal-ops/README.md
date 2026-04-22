@@ -10,6 +10,7 @@ Install only the tables required by the use cases you've selected.
 | Use Case | Required Tables |
 |----------|----------------|
 | HR 人事管理 | 員工名冊, 出勤紀錄, 請假紀錄, 年假管理, 薪酬發放紀錄, 報帳請款紀錄 |
+| Financial Intelligence | Chart of Accounts, General Ledger, Accounts Receivable, Accounts Payable, Bank Feeds |
 
 ---
 
@@ -165,3 +166,118 @@ After setup:
 - Share all 6 tables with your Notion integration
 - Copy all database IDs to `~/.hermes/.env` (see `use-cases/internal-ops/hr-management/config-template/`)
 - Confirm dual_property relations on 出勤紀錄 and 請假紀錄
+
+---
+
+## Finance Module — Financial Intelligence
+
+5 standalone tables. No relations between them (each table is self-contained, linked by Account_ID text field to COA).
+
+```
+┌──────────────────────────────────────────────────────────┐
+│  CLASSIFICATION — Account taxonomy                        │
+│  Chart of Accounts (COA) — all Account_IDs live here     │
+└──────┬───────────────┬──────────────┬────────────────────┘
+       │               │              │
+┌──────▼──────┐ ┌──────▼──────┐ ┌────▼──────────────────┐
+│  General    │ │  Accounts   │ │  Accounts Payable      │
+│  Ledger     │ │  Receivable │ │  (Bills & Expenses)    │
+│  (GL)       │ │  (AR)       │ │                        │
+│  底層流水帳  │ │  應收發票   │ │  應付帳款與費用單       │
+└─────────────┘ └─────────────┘ └────────────────────────┘
+
+┌──────────────────────────────────────────────────────────┐
+│  Bank Feeds (Cash Transactions) — 銀行帳戶真實進出        │
+│  Each row = one transaction, Amount +/- per account      │
+└──────────────────────────────────────────────────────────┘
+```
+
+**核心設計原則：**
+- COA 是所有表的科目分類骨幹，Account_ID 統一命名（4xxx=Revenue, 5xxx=COGS, 6xxx=Expense, 1xxx=Asset, 2xxx=Liability）
+- 損益表由 GL 計算：Revenue Credit − Expense Debit
+- 現金餘額由 Bank Feeds 計算：SUM(Amount) per Bank_Account
+- AR/AP 管理應收應付的狀態追蹤，不做記帳用途
+
+### Chart of Accounts (COA)
+
+| Field | Type | Notes |
+|-------|------|-------|
+| Account_Name | Title | e.g. 顧問服務收入、辦公室租金 |
+| Account_ID | Rich Text | e.g. 4100, 6200 |
+| Account_Type | Select | Revenue / Expense / Asset / Liability / Equity |
+
+Standard Account_ID ranges: Revenue 4xxx, COGS 5xxx, Operating Expense 6xxx, Asset 1xxx, Liability 2xxx
+
+---
+
+### Accounts Receivable / Sales Invoices (AR)
+
+| Field | Type | Notes |
+|-------|------|-------|
+| Invoice_ID | Title | Format: INV-YYYY-NNN |
+| Customer_Name | Rich Text | |
+| Category | Select | 產品銷貨收入 / 顧問服務收入 / 其他 |
+| Issue_Date | Date | |
+| Due_Date | Date | |
+| Total_Amount | Number | |
+| Paid_Amount | Number | For partial payments |
+| Status | Select | **Sent / Paid / Overdue / Cancelled** |
+
+---
+
+### Accounts Payable / Bills & Expenses (AP)
+
+| Field | Type | Notes |
+|-------|------|-------|
+| Bill_ID | Title | Format: BILL-YYYY-NNN or EXP-YYYY-NNN |
+| Vendor_Employee | Rich Text | Supplier or employee name |
+| Category | Rich Text | Expense category name |
+| Account_ID | Rich Text | COA code |
+| Due_Date | Date | |
+| Amount | Number | |
+| Status | Select | **Unpaid / Awaiting Approval / Paid / Cancelled** |
+
+---
+
+### Bank Feeds / Cash Transactions
+
+| Field | Type | Notes |
+|-------|------|-------|
+| Transaction_ID | Title | Format: TXN-YYYY-NNN or OPEN-YYYY-NNN |
+| Bank_Account | Select | Per bank account (e.g. 匯豐-港幣支存) |
+| Date | Date | |
+| Amount | Number | Positive = inflow, Negative = outflow |
+| Payee | Rich Text | Transaction counterparty |
+| Category | Select | COA account name |
+| Reconciled | Checkbox | |
+
+Opening balance row uses Category = 期初餘額 and Amount = opening balance.
+
+---
+
+### General Ledger / Journal Entries (GL)
+
+| Field | Type | Notes |
+|-------|------|-------|
+| Journal_ID | Title | Format: J-YYYY-NNNN |
+| Date | Date | |
+| Account_ID | Rich Text | COA code |
+| Description | Rich Text | Transaction description |
+| Debit_Amount | Number | |
+| Credit_Amount | Number | |
+
+---
+
+### Finance Setup Order
+
+No inter-table relations — create in any order:
+
+1. **Chart of Accounts** — define all account codes first
+2. **Accounts Receivable** — customer invoices
+3. **Accounts Payable** — vendor bills and expenses
+4. **Bank Feeds** — import bank statements (use opening balance rows)
+5. **General Ledger** — journal entries referencing COA Account_IDs
+
+After setup:
+- Share all 5 tables with your Notion integration
+- Copy all database IDs to `~/.hermes/.env` (see `use-cases/internal-ops/financial-intelligence/config-template/`)
