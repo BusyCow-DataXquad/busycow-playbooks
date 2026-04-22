@@ -11,7 +11,7 @@ tags: [HR, Human Resources, Attendance, Payroll, Notion, Internal Ops]
 
 # HR Management — Daily Operations
 
-> Setup is assumed complete. All 6 databases are configured and IDs are saved in ~/.hermes/.env. Do not run setup steps from here.
+> Setup is assumed complete. All 7 databases are configured in agent memory from the SETUP phase. Do not run setup steps from here.
 
 > Field names may differ from recommended schema. Always check actual field names when querying or writing.
 
@@ -40,7 +40,7 @@ Five features that replace manual HR tracking with conversational queries and ac
 ### Workflow
 
 **Query:**
-1. POST /databases/{HR_EMPLOYEES_DB}/query — filter by name, department, or status field
+1. POST /databases/{employee directory database (from memory)}/query — filter by name, department, or status field
 2. Calculate tenure from the start date field to today
 3. Return employee card
 
@@ -77,11 +77,11 @@ Status: [status]
 ### Workflow
 
 **Leave queries:**
-1. POST /databases/{HR_LEAVE_DB}/query — filter by date range, leave type, or employee relation field
-2. For annual leave balance: POST /databases/{HR_ANNUAL_LEAVE_DB}/query — filter by employee and year field
+1. POST /databases/{leave requests database (from memory)}/query — filter by date range, leave type, or employee relation field
+2. For annual leave balance: POST /databases/{annual leave database (from memory)}/query — filter by employee and year field
 
 **Attendance queries:**
-1. POST /databases/{HR_ATTENDANCE_DB}/query — filter by employee relation + date range
+1. POST /databases/{attendance records database (from memory)}/query — filter by employee relation + date range
 2. Sum the overtime hours field across matching records
 
 ### Response Format
@@ -106,8 +106,8 @@ Remaining Annual Leave ([Name]): [X] days ([year])
 ### Workflow
 
 **Query pending items:**
-1. POST /databases/{HR_LEAVE_DB}/query — filter: status field = Pending
-2. POST /databases/{HR_EXPENSE_DB}/query — filter: status field in [Pending Review, Under Review]
+1. POST /databases/{leave requests database (from memory)}/query — filter: status field = Pending
+2. POST /databases/{expense claims database (from memory)}/query — filter: status field in [Pending Review, Under Review]
 
 **Execute approval:**
 1. Locate the page_id of the target record
@@ -139,11 +139,11 @@ Status updated to: Approved
 ### Workflow
 
 **Payroll queries:**
-1. POST /databases/{HR_PAYROLL_DB}/query — filter by month field + disbursement status field
+1. POST /databases/{payroll records database (from memory)}/query — filter by month field + disbursement status field
 2. Return employee name, salary components, net pay, and status
 
 **Expense queries:**
-1. POST /databases/{HR_EXPENSE_DB}/query — filter by employee, status, or category field
+1. POST /databases/{expense claims database (from memory)}/query — filter by employee, status, or category field
 2. For rejection reasons: check the notes field of the relevant record
 
 ### Response Format
@@ -232,18 +232,15 @@ Suggested action: Schedule within a month
 
 ## Configuration
 
-Environment variables loaded from `~/.hermes/.env`:
+Databases are configured in agent memory from the SETUP phase. The following databases are used:
 
 ```
-# Notion
-NOTION_TOKEN=*** Notion integration token
-
-# HR Databases
-HR_EMPLOYEES_DB=                      # Employee Directory DB ID
-HR_ATTENDANCE_DB=                     # Attendance Records DB ID
-HR_LEAVE_DB=                          # Leave Requests DB ID
-HR_ANNUAL_LEAVE_DB=                   # Annual Leave DB ID
-HR_PAYROLL_DB=                        # Payroll Records DB ID
-HR_EXPENSE_DB=                        # Expense Claims DB ID
-HR_1ON1_DB=                           # 1on1 & Wellbeing Records DB ID
+# HR Databases (read from agent memory)
+employees_db        # Employee Directory
+attendance_db       # Attendance Records
+leave_db            # Leave Requests
+annual_leave_db     # Annual Leave
+payroll_db          # Payroll Records
+expense_db          # Expense Claims
+one_on_one_db       # 1on1 & Wellbeing Records
 ```

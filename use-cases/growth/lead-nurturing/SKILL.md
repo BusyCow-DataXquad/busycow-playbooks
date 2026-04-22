@@ -14,7 +14,7 @@ tags: [CRM, Lead Nurturing, Partners, Notion, Email, Telegram, Business Card]
 
 ## Overview
 
-This skill turns Hermes into a conversational CRM and partner relationship assistant. Setup is already complete — databases are configured and IDs are in `~/.hermes/.env`.
+This skill turns Hermes into a conversational CRM and partner relationship assistant. Setup is already complete — databases are configured in agent memory from the SETUP phase.
 
 Features:
 1. **Conversational CRM Logging** — log interactions, create accounts/contacts, update pipeline stages through natural chat
@@ -339,34 +339,16 @@ When user sends multiple photos:
 
 ```
 # Notion
-NOTION_TOKEN=                     # Notion integration token
-
-# Fact Layer
-ACCOUNTS_DB=                      # Accounts database ID
-CONTACTS_DB=                      # Contacts database ID
-
-# Relationship Layer
-DEALS_DB=                         # Deals database ID
-PARTNERSHIP_DB=                   # Partnership database ID (if configured)
-
-# Record Layer
-ACTIVITIES_DB=                    # Activities database ID
-
-# Content
-CONTENT_LIBRARY_DB=               # Content Library database ID
+NOTION_TOKEN=*** Notion integration token
 
 # Telegram (daily report delivery)
-TELEGRAM_BOT_TOKEN=               # Telegram bot token
-TELEGRAM_CHAT_ID=                 # e.g. -100XXXXXXXXX
-TELEGRAM_THREAD_ID=               # Thread/topic ID for daily report
+TELEGRAM_BOT_TOKEN=*** Telegram bot token
 
 # Email (bulk outreach)
 EMAIL_FROM=                       # Sender address
 EMAIL_ACCOUNT=                    # Account name in Himalaya config (if using Himalaya)
-
-# Cron
-DAILY_REPORT_TIME=                # e.g. "0 1 * * *" (01:00 UTC = 09:00 TWN)
-REPORT_LANGUAGE=                  # zh-TW / en / etc.
 ```
+
+> All database IDs, chat IDs, report schedule, and language preference are stored in agent memory (saved during SETUP). The agent reads them from memory whenever this use case is active.
 
 > Field names in the client's databases may differ from the recommended schema described in SETUP.md. Always check the actual property names in each database before querying or writing. Use the field names as they exist in the client's Notion workspace.

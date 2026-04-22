@@ -1,13 +1,8 @@
+# Only true secrets belong here. DB IDs, page IDs, and delivery config
+# are saved to agent memory during the SETUP phase and read from there.
+
 # Notion
-NOTION_TOKEN=                         # Notion integration token (from notion.so/my-integrations)
+NOTION_TOKEN=*** Notion integration token (from notion.so/my-integrations)
 
-# Finance Databases — get IDs from Notion URL (32-char hex after last /)
-FINANCE_COA_DB=                       # Chart of Accounts DB ID
-FINANCE_GL_DB=                        # General Ledger DB ID
-FINANCE_AR_DB=                        # Accounts Receivable DB ID
-FINANCE_AP_DB=                        # Accounts Payable DB ID
-FINANCE_BANK_DB=                      # Bank Feeds DB ID
-
-# Telegram (for weekly/monthly automated reports)
-FINANCE_TELEGRAM_CHAT_ID=             # e.g. -100XXXXXXXXX
-FINANCE_TELEGRAM_THREAD_ID=           # Thread/topic ID for finance reports
+# Telegram
+TELEGRAM_BOT_TOKEN=*** Telegram bot token (from @BotFather)

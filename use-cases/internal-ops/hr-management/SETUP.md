@@ -67,26 +67,24 @@ Compare the actual property names and types against the recommended schema below
 
 ## Phase 4 — Configure
 
-Once all databases are confirmed and accessible, save their IDs to `~/.hermes/.env`.
+Once all databases are confirmed and accessible, retrieve each database ID from the Notion URL (the 32-character hex string after the last `/`).
 
-Retrieve each database ID from the Notion URL (the 32-character hex string after the last `/`).
-
-Append to `~/.hermes/.env`:
+Use the memory tool to save all IDs under a clearly labeled memory entry:
 
 ```
-NOTION_TOKEN=***
-HR_EMPLOYEES_DB=<Employee Directory database ID>
-HR_ATTENDANCE_DB=<Attendance Records database ID>
-HR_LEAVE_DB=<Leave Requests database ID>
-HR_ANNUAL_LEAVE_DB=<Annual Leave database ID>
-HR_PAYROLL_DB=<Payroll Records database ID>
-HR_EXPENSE_DB=<Expense Claims database ID>
-HR_1ON1_DB=<1on1 Records database ID>
+HR Management config:
+  employees_db: <Employee Directory database ID>
+  attendance_db: <Attendance Records database ID>
+  leave_db: <Leave Requests database ID>
+  annual_leave_db: <Annual Leave database ID>
+  payroll_db: <Payroll Records database ID>
+  expense_db: <Expense Claims database ID>
+  one_on_one_db: <1on1 Records database ID>
 ```
 
-After saving, confirm with a summary:
+After saving to memory, confirm with a summary:
 
-> "HR Management setup is complete. The following databases are configured:
+> "HR Management setup is complete. The following databases are configured in agent memory:
 > - Employee Directory: [ID]
 > - Attendance Records: [ID]
 > - Leave Requests: [ID]
@@ -95,7 +93,7 @@ After saving, confirm with a summary:
 > - Expense Claims: [ID]
 > - 1on1 Records: [ID]
 >
-> All IDs have been saved to ~/.hermes/.env. You can now load SKILL.md to activate daily HR operations."
+> You can now load SKILL.md to activate daily HR operations."
 
 ---
 

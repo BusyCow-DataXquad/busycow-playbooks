@@ -1,34 +1,13 @@
-# Environment Variables — Lead Nurturing CRM
-# Copy to ~/.hermes/.env and fill in all values
-# Run SETUP.md first — it will help you find or create databases and fill in these IDs
+# Only true secrets belong here. DB IDs, page IDs, and delivery config
+# are saved to agent memory during the SETUP phase and read from there.
 
 # Notion
-NOTION_TOKEN=your_notion_integration_token
+NOTION_TOKEN=your_n...oken
 
-# Fact Layer
-ACCOUNTS_DB=your_accounts_database_id
-CONTACTS_DB=your_contacts_database_id
-
-# Relationship Layer
-DEALS_DB=your_deals_database_id
-PARTNERSHIP_DB=your_partnership_database_id
-
-# Record Layer
-ACTIVITIES_DB=your_activities_database_id
-
-# Content
-CONTENT_LIBRARY_DB=your_content_library_database_id
-
-# Telegram (for daily report delivery)
-TELEGRAM_BOT_TOKEN=your_telegram_bot_token
-TELEGRAM_CHAT_ID=your_telegram_chat_id
-TELEGRAM_THREAD_ID=your_telegram_thread_id
+# Telegram
+TELEGRAM_BOT_TOKEN=your_t...oken
 
 # Email (for bulk outreach)
 # If using Gmail via Himalaya, configure ~/.config/himalaya/config.toml
 EMAIL_FROM=your_sender_email
 EMAIL_ACCOUNT=your_himalaya_account_name
-
-# Cron / Report Settings
-DAILY_REPORT_TIME="0 1 * * *"    # 01:00 UTC = 09:00 Taiwan time
-REPORT_LANGUAGE=zh-TW             # zh-TW / en / etc.

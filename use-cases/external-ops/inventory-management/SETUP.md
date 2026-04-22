@@ -130,16 +130,18 @@ Report the results of all checks to the user. List what was found, what was adde
 
 ## Phase 4: Configure
 
-Save all database IDs and configuration values to ~/.hermes/.env.
+Save all database IDs to agent memory using the memory tool.
 
-Append the following keys (do not overwrite any existing keys in the file):
+Use the memory tool to save all IDs under a clearly labeled memory entry:
 
-NOTION_TOKEN=<Notion API integration token — ask the user if not already set>
-INV_MGMT_PRODUCT_CATALOG_DB_ID=<database ID of Product Catalog>
-INV_MGMT_DEALER_LIST_DB_ID=<database ID of Dealer List>
-INV_MGMT_OUTBOUND_RECORDS_DB_ID=<database ID of Outbound Records>
-INV_MGMT_INBOUND_RECORDS_DB_ID=<database ID of Inbound Records>
+```
+Inventory Management config:
+  product_catalog_db: <database ID of Product Catalog>
+  dealer_list_db: <database ID of Dealer List>
+  outbound_records_db: <database ID of Outbound Records>
+  inbound_records_db: <database ID of Inbound Records>
+```
 
-After writing the file, confirm to the user: "Configuration saved to ~/.hermes/.env. The inventory management skill is ready to use."
+After saving to memory, confirm to the user: "Configuration saved to agent memory. The inventory management skill is ready to use."
 
 If any database ID is unknown (e.g., user chose to skip creation), leave the value blank and tell the user which IDs still need to be filled in manually.

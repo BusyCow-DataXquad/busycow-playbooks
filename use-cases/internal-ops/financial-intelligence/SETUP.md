@@ -70,30 +70,29 @@ Compare the actual property names and types against the recommended schema below
 
 ## Phase 4 — Configure
 
-Once all databases are confirmed and accessible, save their IDs to `~/.hermes/.env`.
+Once all databases are confirmed and accessible, retrieve each database ID from the Notion URL (the 32-character hex string after the last `/`).
 
-Retrieve each database ID from the Notion URL (the 32-character hex string after the last `/`).
-
-Append to `~/.hermes/.env`:
+Use the memory tool to save all IDs and configuration under a clearly labeled memory entry:
 
 ```
-NOTION_TOKEN=<value>
-FINANCE_COA_DB=<Chart of Accounts database ID>
-FINANCE_GL_DB=<General Ledger database ID>
-FINANCE_AR_DB=<Accounts Receivable database ID>
-FINANCE_AP_DB=<Accounts Payable database ID>
-FINANCE_BANK_DB=<Bank Feeds database ID>
-FINANCE_TELEGRAM_CHAT_ID=<Telegram chat ID for automated reports>
-FINANCE_TELEGRAM_THREAD_ID=<Telegram thread/topic ID>
+Financial Intelligence config:
+  coa_db: <Chart of Accounts database ID>
+  gl_db: <General Ledger database ID>
+  ar_db: <Accounts Receivable database ID>
+  ap_db: <Accounts Payable database ID>
+  bank_db: <Bank Feeds database ID>
+  report_chat_id: <Telegram chat ID for automated reports>
+  report_thread_id: <Telegram thread/topic ID>
+  accounting_approach: notion-standalone OR xero-mirror (whichever was chosen)
 ```
 
-After saving, confirm with a summary:
+After saving to memory, confirm with a summary:
 
 > "Financial Intelligence setup is complete.
 >
 > Accounting approach: [Notion standalone / Mirroring from Xero / Mirroring from QuickBooks]
 >
-> The following databases are configured:
+> The following databases are configured in agent memory:
 > - Chart of Accounts: [ID]
 > - General Ledger: [ID]
 > - Accounts Receivable: [ID]
@@ -102,7 +101,7 @@ After saving, confirm with a summary:
 >
 > Telegram reporting: Chat [chat ID], Thread [thread ID]
 >
-> All values saved to ~/.hermes/.env. You can now load SKILL.md to activate financial intelligence operations."
+> You can now load SKILL.md to activate financial intelligence operations."
 
 ---
 

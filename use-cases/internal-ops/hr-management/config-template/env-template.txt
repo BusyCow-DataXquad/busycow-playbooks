@@ -1,11 +1,5 @@
-# Notion
-NOTION_TOKEN=                         # Notion integration token (from notion.so/my-integrations)
+# Only true secrets belong here. DB IDs, page IDs, and delivery config
+# are saved to agent memory during the SETUP phase and read from there.
 
-# HR Databases — get IDs from Notion URL (32-char hex after last /)
-HR_EMPLOYEES_DB=                      # Employee Directory DB ID
-HR_ATTENDANCE_DB=                     # Attendance Records DB ID
-HR_LEAVE_DB=                          # Leave Requests DB ID
-HR_ANNUAL_LEAVE_DB=                   # Annual Leave DB ID
-HR_PAYROLL_DB=                        # Payroll Records DB ID
-HR_EXPENSE_DB=                        # Expense Claims DB ID
-HR_1ON1_DB=your_1on1_records_database_id  # 1on1 & Wellbeing Records DB
+# Notion
+NOTION_TOKEN=*** Notion integration token (from notion.so/my-integrations)

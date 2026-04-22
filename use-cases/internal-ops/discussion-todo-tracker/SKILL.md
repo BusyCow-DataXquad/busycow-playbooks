@@ -20,7 +20,7 @@ This skill turns Hermes into a structured internal ops assistant. When the user 
 - Preserves unresolved topics as Pending Follow-up tasks so nothing slips
 - Identifies strategy-level decisions and updates the Business Core KB — always with user confirmation first
 
-Setup is already complete. All databases are connected and Business Core KB pages are linked.
+Setup is already complete. All databases are connected and Business Core KB pages are configured in agent memory from the SETUP phase.
 
 ---
 
@@ -155,19 +155,17 @@ Set the Output Type on the Discussion record based on what was produced:
 
 ## Configuration Block
 
-All values are loaded from `~/.hermes/.env`. Do not hardcode IDs in this file.
+All values are read from agent memory, saved during the SETUP phase. Do not hardcode IDs in this file.
 
 ```
-# Loaded from ~/.hermes/.env
+# Read from agent memory
+discussions_db       # Internal Discussions database ID
+tasks_db             # Task Tracker database ID
 
-NOTION_TOKEN=                    # Notion integration token
-DISCUSSIONS_DB_ID=               # Internal Discussions database ID
-TASKS_DB_ID=                     # Task Tracker database ID
-
-# Business Core KB page IDs
-BRAND_POSITIONING_PAGE_ID=       # Brand / positioning page
-TA_ANALYSIS_PAGE_ID=             # Target audience analysis page
-PRICING_BUSINESS_PAGE_ID=        # Pricing and business model page
+# Business Core KB page IDs (from agent memory)
+kb_brand_page        # Brand / positioning page
+kb_ta_page           # Target audience analysis page
+kb_pricing_page      # Pricing and business model page
 ```
 
 ---

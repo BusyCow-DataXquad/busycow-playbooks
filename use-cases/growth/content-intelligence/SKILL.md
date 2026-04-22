@@ -15,7 +15,7 @@ tags: [Content Intelligence, Content Creation, Notion, Brand, Sources, Daily Bri
 
 ## Overview
 
-Setup is already complete — databases and KB page IDs are in `~/.hermes/.env`. This skill covers daily content operations.
+Setup is already complete — databases and KB page IDs are configured in agent memory from the SETUP phase. This skill covers daily content operations.
 
 Features:
 1. **Source Discovery** — reads brand KB and recommends external sources worth tracking; presents for approval before adding anything
@@ -147,7 +147,7 @@ If the request is clear (e.g. continuing from a briefing), skip clarification an
 
 ### Step 2 — Load KB and Styling Guide
 
-Always load before writing. Use the IDs from `~/.hermes/.env`.
+Always load before writing. Use the IDs from agent memory.
 
 | Content Type | What to load |
 |-------------|-------------|
@@ -172,7 +172,7 @@ Rules:
 - Match the brand tone from the KB (no generic AI filler: "In today's fast-paced world...")
 - Ground all product or service claims in the KB — do not invent features
 - Include a clear CTA unless the format doesn't call for one
-- Output in the language specified (default: CONTENT_LANGUAGE from `.env`)
+- Output in the language specified (default: content language from agent memory)
 
 Present the draft:
 
@@ -229,7 +229,7 @@ Trigger: "That cold outreach email we wrote before — can you adapt it for the 
 
 ### What it is
 
-A standalone Notion page (not a database) that defines how the brand writes. The agent reads this page before every content draft. The page ID is stored in `CONTENT_STYLING_GUIDE_PAGE_ID` in `~/.hermes/.env`.
+A standalone Notion page (not a database) that defines how the brand writes. The agent reads this page before every content draft. The page ID is stored in agent memory (saved during SETUP).
 
 ### Conversational triggers
 
@@ -309,28 +309,12 @@ Content Styling Guide
 
 ```
 # Notion
-NOTION_TOKEN=                          # Notion integration token
-
-# Knowledge Base (Notion Page IDs)
-KB_BRAND_POSITIONING_PAGE_ID=          # Brand identity / positioning page
-KB_TARGET_AUDIENCE_PAGE_ID=            # Target audience analysis page
-KB_PRICING_PAGE_ID=                    # Pricing and business model page
-KB_PRODUCT_PAGE_ID=                    # Product / service overview page
-
-# Notion Databases
-SOURCES_DB=                            # Sources database ID
-CONTENT_LIBRARY_DB=                    # Content Library database ID
-
-# Content Styling Guide (standalone Notion page — not a database)
-CONTENT_STYLING_GUIDE_PAGE_ID=         # Content Styling Guide page ID
+NOTION_TOKEN=*** Notion integration token
 
 # Telegram (for daily briefing delivery)
-TELEGRAM_BOT_TOKEN=                    # Telegram bot token
-CONTENT_TELEGRAM_CHAT_ID=             # e.g. -100XXXXXXXXX
-CONTENT_TELEGRAM_THREAD_ID=           # Thread/topic ID
-
-# Defaults
-CONTENT_LANGUAGE=zh-TW                 # Default output language: zh-TW / en / etc.
+TELEGRAM_BOT_TOKEN=*** Telegram bot token
 ```
+
+> All database IDs, KB page IDs, chat IDs, and language preference are stored in agent memory (saved during SETUP). The agent reads them from memory whenever this use case is active.
 
 > Field names in the client's databases may differ from the recommended schema described in SETUP.md. Always check the actual property names in each database before querying or writing. Use the field names as they exist in the client's Notion workspace.

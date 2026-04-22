@@ -3,12 +3,6 @@ skill: inventory-management
 version: 1.0.0
 use_case: External Ops — Inventory Management
 applies_to: SME distributors and dealers managing a reseller network
-databases:
-  - product_catalog: $INV_MGMT_PRODUCT_CATALOG_DB_ID
-  - dealer_list: $INV_MGMT_DEALER_LIST_DB_ID
-  - outbound_records: $INV_MGMT_OUTBOUND_RECORDS_DB_ID
-  - inbound_records: $INV_MGMT_INBOUND_RECORDS_DB_ID
-notion_token: $NOTION_TOKEN
 ---
 
 # Inventory Management Skill
@@ -259,12 +253,14 @@ These rules apply across all features. Follow them without exception.
 
 ## Configuration
 
-The following environment variables must be set in ~/.hermes/.env for this skill to function:
+Database IDs are read from agent memory, saved during the SETUP phase. The following databases are used:
 
-NOTION_TOKEN — Notion API integration token with read/write access to the workspace.
-INV_MGMT_PRODUCT_CATALOG_DB_ID — Database ID of the Product Catalog table.
-INV_MGMT_DEALER_LIST_DB_ID — Database ID of the Dealer List table.
-INV_MGMT_OUTBOUND_RECORDS_DB_ID — Database ID of the Outbound Records table.
-INV_MGMT_INBOUND_RECORDS_DB_ID — Database ID of the Inbound Records table.
+```
+# Inventory Databases (read from agent memory)
+product_catalog_db       # Product Catalog — single source of truth for all stock numbers
+dealer_list_db           # Dealer List — master record of all reseller/dealer partners
+outbound_records_db      # Outbound Records — every shipment logged here
+inbound_records_db       # Inbound Records — every purchase order and goods receipt logged here
+```
 
 Run the SETUP.md workflow to populate these values. Do not hardcode IDs in this file.

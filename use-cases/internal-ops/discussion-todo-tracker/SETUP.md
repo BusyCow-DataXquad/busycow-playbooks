@@ -40,7 +40,7 @@ The Business Core KB consists of standalone Notion pages — not databases. Sear
 Present the matches to the client and confirm which pages are the active Business Core KB:
 > "I found these pages that look like Business Core documents — [list]. Are these the ones you want the agent to update when strategy decisions are made?"
 
-Record the page IDs for all confirmed Business Core pages. These go into `~/.hermes/.env`.
+Record the page IDs for all confirmed Business Core pages. These will be saved to agent memory in the Configure phase.
 
 ---
 
@@ -110,20 +110,20 @@ Verify that all confirmed Business Core KB page IDs from Phase 1 are recorded. A
 
 ## Phase 4: Configure
 
-Once all databases are set up and the Relation is confirmed, collect the configuration values.
+Once all databases are set up and the Relation is confirmed, collect and save the configuration values using the memory tool.
 
-### Required values
+Retrieve each database ID from the Notion URL (the 32-character hex string after the last `/`). Retrieve each page ID in the same way.
 
-| Variable | Where to find it |
-|----------|-----------------|
-| `NOTION_TOKEN` | Notion integration settings → copy the Internal Integration Secret |
-| `DISCUSSIONS_DB_ID` | Internal Discussions database → Share → Copy link → extract the 32-char ID |
-| `TASKS_DB_ID` | Task Tracker database → Share → Copy link → extract the 32-char ID |
-| `BRAND_POSITIONING_PAGE_ID` | Brand Positioning page → Share → Copy link → extract the 32-char ID |
-| `TA_ANALYSIS_PAGE_ID` | Target Audience page → Share → Copy link → extract the 32-char ID |
-| `PRICING_BUSINESS_PAGE_ID` | Pricing / Business Model page → Share → Copy link → extract the 32-char ID |
+Use the memory tool to save all IDs under a clearly labeled memory entry:
 
-Guide the client to retrieve each value. Once collected, write them to `~/.hermes/.env` using the template in `config-template/env-template.txt`.
+```
+Discussion & Todo Tracker config:
+  discussions_db: <Internal Discussions database ID>
+  tasks_db: <Task Tracker database ID>
+  kb_brand_page: <Brand Positioning page ID>
+  kb_ta_page: <Target Audience page ID>
+  kb_pricing_page: <Pricing / Business Model page ID>
+```
 
 Remind the client that the Notion integration must be granted access to all databases and pages listed above — otherwise the agent will not be able to read or write to them.
 
@@ -149,4 +149,4 @@ If any check fails, trace back to the relevant phase and resolve before confirmi
 
 After verification, the client uses this use case daily via **SKILL.md**. No further setup is needed unless they want to add new Business Core KB pages or change the database schema.
 
-To add more Business Core KB pages later, retrieve the page ID and add it to `~/.hermes/.env`, then inform the agent which document it refers to.
+To add more Business Core KB pages later, retrieve the page ID and save it to agent memory, then inform the agent which document it refers to.

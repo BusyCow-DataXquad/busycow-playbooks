@@ -153,9 +153,26 @@ For KB pages and the Content Styling Guide: do not modify their structure. Just 
 
 Once all items are found or created:
 
-1. Save all IDs to `~/.hermes/.env` using the variable names in the env-template
-2. If any Telegram credentials are not yet in `.env`, ask the user to provide them now
-3. Confirm setup is complete with a summary:
+1. Use the memory tool to save all found/created IDs under a clearly labeled memory entry. Save the following structure:
+
+```
+Content Intelligence config:
+  sources_db: <id>
+  content_library_db: <id>
+  kb_brand_page: <id>
+  kb_ta_page: <id>
+  kb_pricing_page: <id>
+  kb_product_page: <id>
+  content_styling_guide_page: <id>
+  briefing_chat_id: <id>
+  briefing_thread_id: <id>
+  content_language: <language>
+```
+
+2. If any Telegram credentials are not yet in `~/.hermes/.env`, ask the user to provide them now
+3. Ask the user to confirm the default content language if not already provided
+4. The agent will read all IDs and delivery config from memory whenever this use case is active
+5. Confirm setup is complete with a summary:
 
 ```
 Content Intelligence setup complete.
@@ -172,10 +189,12 @@ Knowledge Base pages:
 
 Content Styling Guide: [ID or "not configured"]
 
-Telegram: [configured / not configured]
-Default language: [CONTENT_LANGUAGE value]
+Daily briefing: [chat ID] / thread [thread ID]
+Default language: [content_language value]
 
-All IDs saved to ~/.hermes/.env. You are ready to start creating content.
+Telegram: [configured / not configured]
+
+All config saved to agent memory. You are ready to start creating content.
 ```
 
 ---

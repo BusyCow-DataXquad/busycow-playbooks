@@ -12,7 +12,7 @@ tags: [Finance, Financial Analysis, Notion, Internal Ops, Cashflow, P&L]
 
 # Financial Intelligence — Daily Operations
 
-> Setup is assumed complete. All 5 databases are configured and IDs are saved in ~/.hermes/.env. Do not run setup steps from here.
+> Setup is assumed complete. All 5 databases are configured in agent memory from the SETUP phase. Do not run setup steps from here.
 
 > Field names may differ from recommended schema. Always check actual field names when querying or writing.
 
@@ -42,21 +42,21 @@ Core principle: All numbers must come from the data tables — no estimation or 
 ### Workflow
 
 **Cash balance:**
-1. POST /databases/{FINANCE_BANK_DB}/query — retrieve all transactions
+1. POST /databases/{bank feeds database (from memory)}/query — retrieve all transactions
 2. GROUP BY bank account field, SUM the amount field per account
 3. Present each account and currency separately — never convert across currencies
 
 **Available cash after deductions:**
 1. Calculate current balance per account (as above)
-2. POST /databases/{FINANCE_AP_DB}/query — filter by status = Unpaid/Awaiting Approval AND due date <= end of this week
+2. POST /databases/{accounts payable database (from memory)}/query — filter by status = Unpaid/Awaiting Approval AND due date <= end of this week
 3. Subtract pending AP from the relevant bank account balance
 
 **Overdue receivables:**
-1. POST /databases/{FINANCE_AR_DB}/query — filter: status = Overdue OR (due date < today AND status != Paid)
+1. POST /databases/{accounts receivable database (from memory)}/query — filter: status = Overdue OR (due date < today AND status != Paid)
 2. List: customer name, invoice ID, amount, days overdue
 
 **Expense breakdown:**
-1. POST /databases/{FINANCE_GL_DB}/query — filter by date range, join to COA by account ID field
+1. POST /databases/{general ledger database (from memory)}/query — filter by date range, join to COA by account ID field
 2. GROUP BY account name, SUM debit amount field
 3. Sort descending by total
 
@@ -145,7 +145,7 @@ Opening Balance: [amount] → Closing Balance: [amount] (Net Change: [amount])
 
 ### P&L Report
 
-1. POST /databases/{FINANCE_GL_DB}/query — filter by date range, join to COA
+1. POST /databases/{general ledger database (from memory)}/query — filter by date range, join to COA
 2. Group: Revenue accounts → sum credit amount field; Expense accounts → sum debit amount field
 3. Compute: Gross Profit = Revenue − COGS; Net Profit = Revenue − Total Expenses
 
@@ -169,7 +169,7 @@ P&L Statement — [YYYY-MM]
 
 ### AR Aging Analysis
 
-1. POST /databases/{FINANCE_AR_DB}/query — filter: status not Paid and not Cancelled
+1. POST /databases/{accounts receivable database (from memory)}/query — filter: status not Paid and not Cancelled
 2. Calculate days overdue = today − due date field
 3. Bucket by aging band
 
@@ -187,7 +187,7 @@ Recommend follow-up: [customers overdue 30+ days]
 
 ### Cash Flow Summary
 
-1. POST /databases/{FINANCE_BANK_DB}/query — filter by date range
+1. POST /databases/{bank feeds database (from memory)}/query — filter by date range
 2. Identify opening balance, inflows, outflows, closing balance
 
 **Output format:**
@@ -216,20 +216,17 @@ Net Change: [amount]
 
 ## Configuration
 
-Environment variables loaded from `~/.hermes/.env`:
+Databases and delivery config are configured in agent memory from the SETUP phase. The following values are used:
 
 ```
-# Notion
-NOTION_TOKEN=                         # Notion integration token
+# Finance Databases (read from agent memory)
+coa_db              # Chart of Accounts
+gl_db               # General Ledger
+ar_db               # Accounts Receivable
+ap_db               # Accounts Payable
+bank_db             # Bank Feeds
 
-# Finance Databases
-FINANCE_COA_DB=                       # Chart of Accounts DB ID
-FINANCE_GL_DB=                        # General Ledger DB ID
-FINANCE_AR_DB=                        # Accounts Receivable DB ID
-FINANCE_AP_DB=                        # Accounts Payable DB ID
-FINANCE_BANK_DB=                      # Bank Feeds DB ID
-
-# Telegram (for weekly/monthly automated reports)
-FINANCE_TELEGRAM_CHAT_ID=             # e.g. -100XXXXXXXXX
-FINANCE_TELEGRAM_THREAD_ID=           # Thread/topic ID for finance reports
+# Telegram reporting (read from agent memory)
+report_chat_id      # Chat ID for weekly/monthly automated reports
+report_thread_id    # Thread/topic ID for finance reports
 ```

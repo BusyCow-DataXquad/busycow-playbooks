@@ -92,9 +92,26 @@ Would you like me to add these fields? I will not change or remove any of your e
 
 Once all databases are found or created:
 
-1. Save all database IDs to `~/.hermes/.env` using the variable names in the env-template
-2. If any Telegram or email credentials are not yet in `.env`, ask the user to provide them now
-3. Confirm setup is complete with a summary:
+1. Use the memory tool to save all found/created IDs under a clearly labeled memory entry. Save the following structure:
+
+```
+Lead Nurturing CRM config:
+  accounts_db: <id>
+  contacts_db: <id>
+  deals_db: <id>
+  partnership_db: <id>
+  activities_db: <id>
+  content_library_db: <id>
+  daily_report_chat_id: <id>
+  daily_report_thread_id: <id>
+  report_language: zh-TW
+  report_schedule: 0 1 * * *
+```
+
+2. If any Telegram or email credentials are not yet in `~/.hermes/.env`, ask the user to provide them now
+3. Ask the user to confirm the report language and schedule if not already provided
+4. The agent will read all database IDs and delivery config from memory whenever this use case is active
+5. Confirm setup is complete with a summary:
 
 ```
 Lead Nurturing CRM setup complete.
@@ -107,10 +124,14 @@ Databases configured:
 - Activities: [ID]
 - Content Library: [ID]
 
+Daily report: [chat ID] / thread [thread ID]
+Report language: [language]
+Report schedule: [cron expression]
+
 Telegram: [configured / not configured]
 Email: [configured / not configured]
 
-All IDs saved to ~/.hermes/.env. You are ready to start logging interactions.
+All config saved to agent memory. You are ready to start logging interactions.
 ```
 
 ---
