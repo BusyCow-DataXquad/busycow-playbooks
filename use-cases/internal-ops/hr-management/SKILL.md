@@ -3,7 +3,7 @@ name: hr-management
 description: >
   AI-powered HR assistant for Hermes Agent. Manages employee records,
   attendance and leave tracking, approval workflows, and payroll/expense
-  monitoring — all through natural conversation. Grounded in 6 Notion databases.
+  monitoring — all through natural conversation. Grounded in 7 Notion databases.
 version: 1.1.0
 author: BusyCow
 tags: [HR, Human Resources, Attendance, Payroll, Notion, Internal Ops]
@@ -19,12 +19,13 @@ tags: [HR, Human Resources, Attendance, Payroll, Notion, Internal Ops]
 
 ## Overview
 
-Four features that replace manual HR tracking with conversational queries and actions:
+Five features that replace manual HR tracking with conversational queries and actions:
 
 1. **Employee Directory Management** — Query and update employee records through conversation
 2. **Attendance and Leave Queries** — Check leave, attendance, and annual leave balances
 3. **Approval Processing** — Approve or reject leave and expense requests directly in chat
 4. **Payroll and Expense Tracking** — Review payroll disbursement status and expense claim progress
+5. **1on1 & Employee Wellbeing Records** — Log employee conversations, track wellbeing, and receive quarterly check-in reminders
 
 ---
 
@@ -158,6 +159,67 @@ Paid: [N] entries
 
 ---
 
+## Feature 5 — 1on1 & Employee Wellbeing Records
+
+### What it does
+
+This feature turns ad-hoc employee conversations into structured records — so managers never lose track of what was discussed, agreed, or flagged. It covers the '育' (develop) and '留' (retain) dimensions of HR — the parts most often neglected in SMEs without a dedicated HR team. By logging wellbeing status over time and triggering proactive reminders, it helps managers stay ahead of retention risks before they become resignations.
+
+### Conversational Triggers
+
+- "Log a 1on1 with [name] — we talked about career direction, she seems stable"
+- "What's the last time I talked to [name]?"
+- "Who hasn't had a 1on1 in the past 3 months?"
+- "[name] seems unhappy lately — log a wellbeing note"
+- "Set up quarterly 1on1 reminders"
+
+### Workflow — Logging a Conversation
+
+1. Ask for: employee name, date, type, summary of what was discussed
+2. Ask: "How would you rate their current wellbeing? (Stable / Needs Attention / At Risk)"
+3. Ask: "Any follow-up actions?"
+4. Ask: "When should the next conversation happen? (default: 90 days from today)"
+5. Create the record in 1on1 Records DB
+6. Confirm: show a summary card
+
+### Workflow — Quarterly Reminder Cron
+
+Schedule: every 3 months (or configurable). Query 1on1 Records for each active employee — find employees where:
+- Next Suggested Date <= today, OR
+- No 1on1 record exists in the past 90 days
+
+For At Risk employees: trigger if > 30 days since last conversation
+For Needs Attention: trigger if > 45 days
+For Stable: trigger if > 90 days
+
+Deliver a reminder message:
+
+```
+🔔 1on1 Reminder — [DATE]
+
+Employees due for a check-in:
+
+⚠️ [Name] — Status: At Risk | Last 1on1: [DATE] ([N] days ago)
+Last note: [summary excerpt]
+Suggested action: Schedule this week
+
+🟡 [Name] — Status: Needs Attention | Last 1on1: [DATE] ([N] days ago)
+Suggested action: Schedule within 2 weeks
+
+✅ [Name] — Status: Stable | Last 1on1: [DATE] ([N] days ago)
+Suggested action: Schedule within a month
+```
+
+### Behavioral Rules for this Feature
+
+- Never share one employee's conversation details when queried about another employee
+- Always confirm the wellbeing status with the user — never infer it from conversation tone alone
+- For At Risk employees, suggest scheduling the next conversation immediately
+- Cron reminders run automatically — no user confirmation needed to send the reminder
+- If no 1on1 record exists for an employee at all, flag them as a priority in the cron reminder
+
+---
+
 ## Behavioral Rules
 
 1. **Confirm before changing** — All updates (status changes, field edits) must show a confirmation message first. Only execute after the user confirms.
@@ -174,7 +236,7 @@ Environment variables loaded from `~/.hermes/.env`:
 
 ```
 # Notion
-NOTION_TOKEN=                         # Notion integration token
+NOTION_TOKEN=*** Notion integration token
 
 # HR Databases
 HR_EMPLOYEES_DB=                      # Employee Directory DB ID
@@ -183,4 +245,5 @@ HR_LEAVE_DB=                          # Leave Requests DB ID
 HR_ANNUAL_LEAVE_DB=                   # Annual Leave DB ID
 HR_PAYROLL_DB=                        # Payroll Records DB ID
 HR_EXPENSE_DB=                        # Expense Claims DB ID
+HR_1ON1_DB=                           # 1on1 & Wellbeing Records DB ID
 ```

@@ -8,3 +8,4 @@ HR_LEAVE_DB=                          # Leave Requests DB ID
 HR_ANNUAL_LEAVE_DB=                   # Annual Leave DB ID
 HR_PAYROLL_DB=                        # Payroll Records DB ID
 HR_EXPENSE_DB=                        # Expense Claims DB ID
+HR_1ON1_DB=your_1on1_records_database_id  # 1on1 & Wellbeing Records DB

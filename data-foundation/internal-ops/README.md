@@ -9,7 +9,7 @@ Install only the tables required by the use cases you've selected.
 
 | Use Case | Required Tables |
 |----------|----------------|
-| HR Management | Employee Directory, Attendance Records, Leave Requests, Annual Leave, Payroll Records, Expense Claims |
+| HR Management | Employee Directory, Attendance Records, Leave Requests, Annual Leave, Payroll Records, Expense Claims, 1on1 紀錄表 |
 | Financial Intelligence | Chart of Accounts, General Ledger, Accounts Receivable, Accounts Payable, Bank Feeds |
 | Discussion & Todo Tracker | Internal Discussions, Task Tracker |
 
@@ -153,6 +153,27 @@ Employee expense claims with full reimbursement workflow. One row per claim.
 
 ---
 
+### 1on1 Records
+
+One row per employee conversation. Not limited to formal 1on1s — any meaningful conversation worth recording.
+
+| Field | Type | Notes |
+|-------|------|-------|
+| Conversation Title | Title | Brief label e.g. "Q1 1on1 — [Name]" |
+| Employee | Relation → Employee Directory | Dual property — backlink shows in Employee Directory |
+| Conversation Date | Date | |
+| Type | Select | Regular 1on1 / Wellbeing Check-in / Performance Discussion / Salary Discussion / Career Planning / Issue Resolution / Other |
+| Facilitator | Rich Text | Who led the conversation (manager name) |
+| Employee Wellbeing Status | Select | Stable / Needs Attention / At Risk / Not Assessed |
+| Next Suggested Date | Date | Default: 90 days from Conversation Date |
+| Summary | Rich Text | Key points from the conversation |
+| Next Actions | Rich Text | Follow-up commitments made |
+| Days Since Last 1on1 | Number | Used by cron job to calculate reminder timing |
+
+Design note: create AFTER Employee Directory. Wellbeing Status is always set by the manager — never inferred automatically by the agent.
+
+---
+
 ## Setup Order
 
 Create tables in this order (relations depend on Employee Directory):
@@ -163,11 +184,12 @@ Create tables in this order (relations depend on Employee Directory):
 4. **Annual Leave** → relate to Employee Directory
 5. **Payroll Records** → relate to Employee Directory
 6. **Expense Claims** → relate to Employee Directory
+7. **1on1 Records** → relate to Employee Directory (create after Employee Directory)
 
 After setup:
-- Share all 6 tables with your Notion integration
+- Share all 7 tables with your Notion integration
 - Copy all database IDs to `~/.hermes/.env` (see `use-cases/internal-ops/hr-management/config-template/`)
-- Confirm dual_property relations on Attendance Records and Leave Requests
+- Confirm dual_property relations on Attendance Records, Leave Requests, and 1on1 Records
 
 ---
 

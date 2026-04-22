@@ -14,6 +14,7 @@ Search the client's Notion workspace for existing databases that may already ser
 - Leave, Time Off, Annual Leave, Vacation, Sick Leave
 - Payroll, Salary, Compensation, Wages
 - Expense, Reimbursement, Claims
+- 1on1, one-on-one, wellbeing, employee conversation, retention
 
 **Property patterns that indicate a match:**
 - A database with a name field plus Department, Job Title, and a Status field with values like Active / Resigned — likely the Employee Directory
@@ -27,18 +28,19 @@ Search the client's Notion workspace for existing databases that may already ser
 
 ## Phase 2 — Onboard
 
-Review the discovery findings with the user. For each of the 6 required databases, determine whether an existing database can serve that role or a new one must be created.
+Review the discovery findings with the user. For each of the 7 required databases, determine whether an existing database can serve that role or a new one must be created.
 
 **Dependency rule — Employee Directory first:**
-The Employee Directory must exist before any other database is created or connected, because all other tables (Attendance, Leave, Payroll, Expense) use a relation field that points back to it. Create or confirm the Employee Directory first, then proceed to the remaining five databases in any order.
+The Employee Directory must exist before any other database is created or connected, because all other tables (Attendance, Leave, Payroll, Expense, 1on1 Records) use a relation field that points back to it. Create or confirm the Employee Directory first, then proceed to the remaining six databases in any order.
 
-**The 6 required databases:**
+**The 7 required databases:**
 1. Employee Directory
 2. Attendance Records
 3. Leave Requests
 4. Annual Leave
 5. Payroll Records
 6. Expense Claims
+7. 1on1 Records
 
 For each missing database, show the user the recommended schema from the section below and ask: "Would you like me to create this database via the Notion API, or would you prefer to create it manually?"
 
@@ -72,13 +74,14 @@ Retrieve each database ID from the Notion URL (the 32-character hex string after
 Append to `~/.hermes/.env`:
 
 ```
-NOTION_TOKEN=<value>
+NOTION_TOKEN=***
 HR_EMPLOYEES_DB=<Employee Directory database ID>
 HR_ATTENDANCE_DB=<Attendance Records database ID>
 HR_LEAVE_DB=<Leave Requests database ID>
 HR_ANNUAL_LEAVE_DB=<Annual Leave database ID>
 HR_PAYROLL_DB=<Payroll Records database ID>
 HR_EXPENSE_DB=<Expense Claims database ID>
+HR_1ON1_DB=<1on1 Records database ID>
 ```
 
 After saving, confirm with a summary:
@@ -90,6 +93,7 @@ After saving, confirm with a summary:
 > - Annual Leave: [ID]
 > - Payroll Records: [ID]
 > - Expense Claims: [ID]
+> - 1on1 Records: [ID]
 >
 > All IDs have been saved to ~/.hermes/.env. You can now load SKILL.md to activate daily HR operations."
 
@@ -175,3 +179,20 @@ These are suggestions based on common HR setups. Adapt to what the client alread
 | Status | Select | Draft / Pending Review / Under Review / Approved / Rejected / Reimbursed |
 | Notes | Rich Text | Rejection reasons, attachment notes |
 | Cost Classification | Select | OPEX / COGS / None |
+
+### 1on1 Records
+
+> Note: Create AFTER Employee Directory (it depends on the relation).
+
+| Field | Type | Notes |
+|-------|------|-------|
+| Conversation Title | Title | |
+| Employee | Relation → Employee Directory | Dual property — Employee Directory should show '1on1 Records' backlink |
+| Conversation Date | Date | |
+| Type | Select | Regular 1on1 / Wellbeing Check-in / Performance Discussion / Salary Discussion / Career Planning / Issue Resolution / Other |
+| Facilitator | Rich Text | Who led the conversation |
+| Employee Wellbeing Status | Select | Stable / Needs Attention / At Risk / Not Assessed |
+| Next Suggested Date | Date | |
+| Summary | Rich Text | Key points from the conversation |
+| Next Actions | Rich Text | Follow-up commitments |
+| Days Since Last 1on1 | Number | For cron job calculations |

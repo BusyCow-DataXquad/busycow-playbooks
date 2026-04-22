@@ -14,6 +14,21 @@ This use case turns your Notion workspace into a conversational HR system. Manag
 | Attendance and Leave Queries | Check who is on leave today, review overtime hours for a specific employee, or look up remaining annual leave balance |
 | Approval Processing | Approve or reject leave applications and expense claims directly in chat — the agent finds the pending item, confirms, then updates Notion |
 | Payroll and Expense Tracking | Query monthly payroll disbursement status, view salary breakdowns, and track expense claim progress |
+| 1on1 & Employee Wellbeing Records | Log every meaningful employee conversation, track wellbeing status (Stable / Needs Attention / At Risk), and receive quarterly reminders to check in with employees who haven't been contacted recently. |
+
+---
+
+## Required Data Tables
+
+| Table | Notes |
+|-------|-------|
+| Employee Directory | Master record — all other tables relate to this one |
+| Attendance Records | Daily clock-in/out and overtime |
+| Leave Requests | Leave applications with embedded approval status |
+| Annual Leave | Annual quota and balance per employee per year |
+| Payroll Records | Monthly payroll breakdown and disbursement status |
+| Expense Claims | Employee expense claims with reimbursement workflow |
+| 1on1 Records | one row per conversation; links to Employee Directory via Relation |
 
 ---
 
