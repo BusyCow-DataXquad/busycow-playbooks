@@ -74,27 +74,27 @@ hermes cron create \
 ## How to Use
 
 **Log a lead interaction:**
-- 「剛跟 Alex 通話，他說下週可以安排 Use Case 確認」
+- "Just got off the phone with Alex — he said we can schedule the Use Case confirmation next week"
 
 **Log a partner interaction:**
-- 「剛跟 TechBridge 開完會，他們說下個月會再轉介兩個客戶」
+- "Just wrapped up a meeting with TechBridge — they said they'll refer two more clients next month"
 
 **Query pipeline:**
-- 「哪些客戶超過三天沒聯絡了？」
-- 「GreenBridge 現在在哪個階段？」
-- 「有哪些 Partner 上個月沒有任何互動？」
+- "Which clients haven't been contacted in over three days?"
+- "What stage is GreenBridge at right now?"
+- "Which partners had no interactions last month?"
 
 **Generate a quotation:**
-- 「幫我幫 NovaTech 做一份報價單，方案是標準部署，50,000 HKD，有效期 30 天」
+- "Create a quotation for NovaTech — standard deployment package, 50,000 HKD, valid for 30 days"
 
 **Generate a contract:**
-- 「GreenBridge 要簽約了，幫我用標準合約範本產生合約，填入他們的資料」
+- "GreenBridge is ready to sign — generate a contract using the standard template and fill in their details"
 
 **Import a business card:**
 - Send a photo of the card — agent extracts info, confirms, and creates Contact
 
 **Run outreach:**
-- 「幫我寄開發信給所有 Qualified 階段的客戶」
+- "Send a cold outreach email to all clients in the Qualified stage"
 
 ---
 

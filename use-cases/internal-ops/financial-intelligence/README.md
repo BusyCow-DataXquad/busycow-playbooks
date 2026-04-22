@@ -9,14 +9,14 @@ AI-powered financial analysis system that answers real-time financial questions 
 
 ## What This Use Case Does
 
-### Feature 1 — 即時財務問答
+### Feature 1 — Real-Time Financial Q&A
 Ask any financial question in plain language. The agent queries the 5 financial databases and returns precise numbers with context — cash balances by account, overdue receivables, upcoming payables, expense breakdown by category, and more.
 
-### Feature 2 — 定期健康分析
+### Feature 2 — Scheduled Health Analysis
 Automated push to Telegram — no need to ask. Every Monday morning: a weekly cash snapshot covering balances, new invoices, and upcoming payments. Every 1st of the month: a full health report with P&L summary, cash flow trend, and anomaly alerts (overdue AR, unpaid AP, expense overruns).
 
-### Feature 3 — 財務報表生成
-Generate structured financial reports on demand or on schedule: monthly/quarterly P&L (損益表), cash flow summary (現金流摘要), and AR aging analysis (應收帳款老化分析). All output is formatted for direct use in management meetings.
+### Feature 3 — Financial Report Generation
+Generate structured financial reports on demand or on schedule: monthly/quarterly P&L, cash flow summary, and AR aging analysis. All output is formatted for direct use in management meetings.
 
 ---
 
@@ -81,16 +81,16 @@ hermes cron create \
 ## How to Use
 
 **Real-time questions:**
-- 「我們現在帳上有多少錢？各個戶頭分別多少？」
-- 「扣掉下週要付的款，實際可動用的還有多少？」
-- 「有哪些發票已經逾期還沒收款？」
-- 「這個月費用最大的幾個科目是什麼？」
+- "How much money do we have right now? How much is in each account?"
+- "After deducting next week's payments, how much do we actually have available?"
+- "Which invoices are overdue and haven't been collected yet?"
+- "What are the largest expense categories this month?"
 
 **Generate reports:**
-- 「幫我出 3 月份損益表」
-- 「應收帳款老化分析，列出超過 30 天沒收的」
-- 「這季的現金流量摘要」
-- 「Q1 跟 Q2 的毛利對比」
+- "Generate the March P&L statement for me"
+- "AR aging analysis — list all invoices overdue more than 30 days"
+- "Cash flow summary for this quarter"
+- "Gross profit comparison between Q1 and Q2"
 
 ---
 

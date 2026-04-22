@@ -76,5 +76,5 @@ How do we sound? Pick the words that describe our communication style.
 
 ## Language
 
-**Primary language for customer communication:** [ ] English [ ] 繁體中文 [ ] 简体中文 [ ] Other: ___
+**Primary language for customer communication:** [ ] English [ ] Traditional Chinese [ ] Simplified Chinese [ ] Other: ___
 **Secondary language (if any):** ___

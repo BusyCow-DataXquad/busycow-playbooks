@@ -9,7 +9,7 @@ Install only the tables required by the use cases you've selected.
 
 | Use Case | Required Tables |
 |----------|----------------|
-| HR 人事管理 | 員工名冊, 出勤紀錄, 請假紀錄, 年假管理, 薪酬發放紀錄, 報帳請款紀錄 |
+| HR Management | Employee Directory, Attendance Records, Leave Requests, Annual Leave, Payroll Records, Expense Claims |
 | Financial Intelligence | Chart of Accounts, General Ledger, Accounts Receivable, Accounts Payable, Bank Feeds |
 | Discussion & Todo Tracker | Internal Discussions, Task Tracker |
 
@@ -20,153 +20,154 @@ Install only the tables required by the use cases you've selected.
 ```
 ┌─────────────────────────────────────────────────────┐
 │  MASTER RECORD — Who exists                         │
-│  員工名冊 (employee profiles, status, tenure)        │
+│  Employee Directory (employee profiles, status, tenure) │
 └───┬───────────────┬──────────────┬──────────────────┘
     │               │              │
 ┌───▼───────┐ ┌────▼──────┐ ┌────▼──────────────────┐
-│  出勤紀錄  │ │  請假紀錄  │ │  薪酬發放紀錄           │
-│ (daily    │ │ (leave    │ │ (monthly payroll       │
-│ clock-in  │ │ requests  │ │ breakdown + status)    │
-│ overtime) │ │ approval) │ └────────────────────────┘
+│ Attendance │ │  Leave    │ │  Payroll Records       │
+│ Records   │ │ Requests  │ │ (monthly payroll       │
+│ (daily    │ │ (leave    │ │ breakdown + status)    │
+│ clock-in  │ │ requests  │ └────────────────────────┘
+│ overtime) │ │ approval) │
 └───────────┘ └────▼──────┘
                    │
          ┌─────────▼────────┐  ┌────────────────────────┐
-         │  年假管理          │  │  報帳請款紀錄            │
+         │  Annual Leave    │  │  Expense Claims        │
          │ (annual quota +  │  │ (expense claims +      │
          │  balance per yr) │  │  reimbursement flow)   │
          └──────────────────┘  └────────────────────────┘
 ```
 
-**核心設計原則：**
-- 審批狀態直接嵌入請假紀錄與報帳請款紀錄，不另設獨立審批表
-- 員工名冊是其他 5 張表的 relation 錨點，最先建立
-- 年假管理每年每人一筆，由 HR 手動設定額度，系統追蹤剩餘
+**Core Design Principles:**
+- Approval status is embedded directly in Leave Requests and Expense Claims — no separate approval table needed
+- Employee Directory is the relation anchor for all 5 other tables — create it first
+- Annual Leave has one row per employee per year; HR sets the quota manually and the system tracks the balance
 
 ---
 
 ## Tables
 
-### 員工名冊 (Master Record)
+### Employee Directory (Master Record)
 
 The anchor table. All other tables relate back to this one.
 
 | Field | Type | Notes |
 |-------|------|-------|
-| 員工姓名 | Title | Full name |
-| 英文名 | Rich Text | |
-| 員工編號 | Rich Text | Format: EMP-001 |
-| 部門 | Select | 業務 / 工程 / 產品 / 設計 / 人資 / 營運 / 財務 / 其他 |
-| 職稱 | Rich Text | |
-| 到職日 | Date | |
-| 離職日 | Date | Leave blank for active employees |
-| 狀態 | Select | 在職 / 試用 / 留職停薪 / 離職 |
-| 備註 | Rich Text | Free-form notes |
+| Employee Name | Title | Full name |
+| English Name | Rich Text | |
+| Employee ID | Rich Text | Format: EMP-001 |
+| Department | Select | Sales / Engineering / Product / Design / HR / Operations / Finance / Other |
+| Job Title | Rich Text | |
+| Start Date | Date | |
+| End Date | Date | Leave blank for active employees |
+| Status | Select | Active / Probation / Leave of Absence / Resigned |
+| Notes | Rich Text | Free-form notes |
 
 ---
 
-### 出勤紀錄
+### Attendance Records
 
 Daily clock-in/out and overtime records. One row per employee per day (for days with notable records).
 
 | Field | Type | Notes |
 |-------|------|-------|
-| 出勤紀錄 | Title | Format: A-YYYY-MMDD-姓 |
-| 員工 | Relation → 員工名冊 | Enable dual property |
-| 上班時間 | Date (datetime) | |
-| 下班時間 | Date (datetime) | |
-| 累計加班時數 | Number | Unit: hours |
-| 加班事由 | Rich Text | Required if overtime > 0 |
+| Attendance Record | Title | Format: A-YYYY-MMDD-[surname] |
+| Employee | Relation → Employee Directory | Enable dual property |
+| Clock-In Time | Date (datetime) | |
+| Clock-Out Time | Date (datetime) | |
+| Total Overtime Hours | Number | Unit: hours |
+| Overtime Reason | Rich Text | Required if overtime > 0 |
 
 ---
 
-### 請假紀錄
+### Leave Requests
 
 Leave applications with embedded approval status. One row per leave request.
 
 | Field | Type | Notes |
 |-------|------|-------|
-| 請假單 | Title | Format: L-YYYY-NNNN 姓名 假別 |
-| 員工 | Relation → 員工名冊 | Enable dual property |
-| 假別 | Select | 年假 / 特休 / 病假 / 事假 / 公假 / 補休 / 其他 |
-| 起始日 | Date | |
-| 結束日 | Date | |
-| 天數 | Number | Supports 0.5 |
-| 原因 | Rich Text | |
-| 狀態 | Select | **待核准 / 已核准 / 已拒絕 / 已取消** |
+| Leave Request | Title | Format: L-YYYY-NNNN [name] [leave-type] |
+| Employee | Relation → Employee Directory | Enable dual property |
+| Leave Type | Select | Annual / Paid Leave / Sick / Personal / Public Duty / Compensatory / Other |
+| Start Date | Date | |
+| End Date | Date | |
+| Days | Number | Supports 0.5 |
+| Reason | Rich Text | |
+| Status | Select | **Pending / Approved / Rejected / Cancelled** |
 
-> Approval happens by updating the 狀態 field — no separate approval table needed.
+> Approval happens by updating the Status field — no separate approval table needed.
 
 ---
 
-### 年假管理
+### Annual Leave
 
 Annual leave quota and balance per employee per year. One row per employee per year.
 
 | Field | Type | Notes |
 |-------|------|-------|
-| 年假計算 | Title | Format: YYYY-姓名 |
-| 員工 | Relation → 員工名冊 | |
-| 年度 | Rich Text | e.g. "2026" |
-| 年假總天數 | Number | Set by HR at year start |
-| 已使用天數 | Number | Update when leave is approved |
-| 剩餘天數 | Number | = 總天數 - 已使用天數 |
-| 備註 | Rich Text | e.g. "留職停薪中" |
+| Annual Leave Record | Title | Format: YYYY-[name] |
+| Employee | Relation → Employee Directory | |
+| Year | Rich Text | e.g. "2026" |
+| Total Annual Leave Days | Number | Set by HR at year start |
+| Used Days | Number | Update when leave is approved |
+| Remaining Days | Number | = Total Days − Used Days |
+| Notes | Rich Text | e.g. "On leave of absence" |
 
 ---
 
-### 薪酬發放紀錄
+### Payroll Records
 
 Monthly payroll breakdown and disbursement status. One row per employee per month.
 
 | Field | Type | Notes |
 |-------|------|-------|
-| 薪酬單 | Title | Format: P-YYYY-MM-姓名 |
-| 員工 | Relation → 員工名冊 | |
-| 月份 | Rich Text | Format: YYYY-MM |
-| 底薪 | Number | |
-| 加班費 | Number | |
-| 津貼 | Number | |
-| 扣款 | Number | |
-| 實發金額 | Number | = 底薪 + 加班費 + 津貼 - 扣款 |
-| 發放狀態 | Select | **已發放 / 待發放 / 待確認** |
+| Payroll Record | Title | Format: P-YYYY-MM-[name] |
+| Employee | Relation → Employee Directory | |
+| Month | Rich Text | Format: YYYY-MM |
+| Base Salary | Number | |
+| Overtime Pay | Number | |
+| Allowances | Number | |
+| Deductions | Number | |
+| Net Pay | Number | = Base Salary + Overtime Pay + Allowances − Deductions |
+| Disbursement Status | Select | **Paid / Pending / Awaiting Confirmation** |
 
 ---
 
-### 報帳請款紀錄
+### Expense Claims
 
 Employee expense claims with full reimbursement workflow. One row per claim.
 
 | Field | Type | Notes |
 |-------|------|-------|
-| 報帳項目 | Title | Descriptive name of the expense |
-| 員工 | Relation → 員工名冊 | |
-| 類別 | Select | 差旅 / 交通 / 餐飲 / 住宿 / 軟體/訂閱 / 辦公用品 / 其他 |
-| 報帳日期 | Date | Date of expense |
-| 金額 | Number | |
-| 狀態 | Select | **待送出 / 待審核 / 審核中 / 已核准 / 已退回 / 已報銷** |
-| 備註 | Rich Text | Attachment notes, rejection reasons, etc. |
-| 成本歸類 | Select | OPEX（營業費用）/ COGS（銷貨成本）/ 無 |
-| 計入雜支 | Checkbox | |
+| Expense Item | Title | Descriptive name of the expense |
+| Employee | Relation → Employee Directory | |
+| Category | Select | Travel / Transportation / Meals / Accommodation / Software/Subscriptions / Office Supplies / Other |
+| Expense Date | Date | Date of expense |
+| Amount | Number | |
+| Status | Select | **Draft / Pending Review / Under Review / Approved / Rejected / Reimbursed** |
+| Notes | Rich Text | Attachment notes, rejection reasons, etc. |
+| Cost Classification | Select | OPEX (Operating Expense) / COGS (Cost of Goods Sold) / None |
+| Misc Expense | Checkbox | |
 
-> Rejection reasons go in the 備註 field. The agent surfaces this when queried.
+> Rejection reasons go in the Notes field. The agent surfaces this when queried.
 
 ---
 
 ## Setup Order
 
-Create tables in this order (relations depend on 員工名冊):
+Create tables in this order (relations depend on Employee Directory):
 
-1. **員工名冊** — no dependencies, create first
-2. **出勤紀錄** → relate to 員工名冊
-3. **請假紀錄** → relate to 員工名冊
-4. **年假管理** → relate to 員工名冊
-5. **薪酬發放紀錄** → relate to 員工名冊
-6. **報帳請款紀錄** → relate to 員工名冊
+1. **Employee Directory** — no dependencies, create first
+2. **Attendance Records** → relate to Employee Directory
+3. **Leave Requests** → relate to Employee Directory
+4. **Annual Leave** → relate to Employee Directory
+5. **Payroll Records** → relate to Employee Directory
+6. **Expense Claims** → relate to Employee Directory
 
 After setup:
 - Share all 6 tables with your Notion integration
 - Copy all database IDs to `~/.hermes/.env` (see `use-cases/internal-ops/hr-management/config-template/`)
-- Confirm dual_property relations on 出勤紀錄 and 請假紀錄
+- Confirm dual_property relations on Attendance Records and Leave Requests
 
 ---
 
@@ -184,26 +185,27 @@ After setup:
 │  General    │ │  Accounts   │ │  Accounts Payable      │
 │  Ledger     │ │  Receivable │ │  (Bills & Expenses)    │
 │  (GL)       │ │  (AR)       │ │                        │
-│  底層流水帳  │ │  應收發票   │ │  應付帳款與費用單       │
+│  Raw        │ │  Sales      │ │  Bills & Expense       │
+│  Ledger     │ │  Invoices   │ │  Records               │
 └─────────────┘ └─────────────┘ └────────────────────────┘
 
 ┌──────────────────────────────────────────────────────────┐
-│  Bank Feeds (Cash Transactions) — 銀行帳戶真實進出        │
+│  Bank Feeds (Cash Transactions) — Actual Bank Transactions│
 │  Each row = one transaction, Amount +/- per account      │
 └──────────────────────────────────────────────────────────┘
 ```
 
-**核心設計原則：**
-- COA 是所有表的科目分類骨幹，Account_ID 統一命名（4xxx=Revenue, 5xxx=COGS, 6xxx=Expense, 1xxx=Asset, 2xxx=Liability）
-- 損益表由 GL 計算：Revenue Credit − Expense Debit
-- 現金餘額由 Bank Feeds 計算：SUM(Amount) per Bank_Account
-- AR/AP 管理應收應付的狀態追蹤，不做記帳用途
+**Core Design Principles:**
+- COA is the account classification backbone for all tables; Account_ID follows a unified naming convention (4xxx=Revenue, 5xxx=COGS, 6xxx=Expense, 1xxx=Asset, 2xxx=Liability)
+- Income statement is calculated from GL: Revenue Credit − Expense Debit
+- Cash balance is calculated from Bank Feeds: SUM(Amount) per Bank_Account
+- AR/AP tracks receivable and payable statuses — not used for bookkeeping purposes
 
 ### Chart of Accounts (COA)
 
 | Field | Type | Notes |
 |-------|------|-------|
-| Account_Name | Title | e.g. 顧問服務收入、辦公室租金 |
+| Account_Name | Title | e.g. Consulting Revenue, Office Rent |
 | Account_ID | Rich Text | e.g. 4100, 6200 |
 | Account_Type | Select | Revenue / Expense / Asset / Liability / Equity |
 
@@ -217,7 +219,7 @@ Standard Account_ID ranges: Revenue 4xxx, COGS 5xxx, Operating Expense 6xxx, Ass
 |-------|------|-------|
 | Invoice_ID | Title | Format: INV-YYYY-NNN |
 | Customer_Name | Rich Text | |
-| Category | Select | 產品銷貨收入 / 顧問服務收入 / 其他 |
+| Category | Select | Product Sales Revenue / Consulting Revenue / Other |
 | Issue_Date | Date | |
 | Due_Date | Date | |
 | Total_Amount | Number | |
@@ -245,14 +247,14 @@ Standard Account_ID ranges: Revenue 4xxx, COGS 5xxx, Operating Expense 6xxx, Ass
 | Field | Type | Notes |
 |-------|------|-------|
 | Transaction_ID | Title | Format: TXN-YYYY-NNN or OPEN-YYYY-NNN |
-| Bank_Account | Select | Per bank account (e.g. 匯豐-港幣支存) |
+| Bank_Account | Select | Per bank account (e.g. HSBC-HKD Current) |
 | Date | Date | |
 | Amount | Number | Positive = inflow, Negative = outflow |
 | Payee | Rich Text | Transaction counterparty |
 | Category | Select | COA account name |
 | Reconciled | Checkbox | |
 
-Opening balance row uses Category = 期初餘額 and Amount = opening balance.
+Opening balance row uses Category = Opening Balance and Amount = opening balance.
 
 ---
 
@@ -297,9 +299,9 @@ Logs every internal discussion, meeting, or ad-hoc conversation.
 |-------|------|-------|
 | Name | Title | Short label for the discussion |
 | Date | Date | When the discussion took place |
-| Type | Select | e.g. 週會 / 電話 / 線上 / 臨時討論 |
-| Status | Select | 待處理 / 處理中 / 已完成 |
-| Output Type | Select | 策略更新 / 待辦萃取 / 純記錄 |
+| Type | Select | e.g. Weekly Meeting / Phone / Online / Ad-hoc |
+| Status | Select | Pending / In Progress / Completed |
+| Output Type | Select | Strategy Update / Action Items Extracted / Log Only |
 | Output Note | Rich Text | Summary of outcomes or key decisions |
 | Participants | Rich Text | Who was involved |
 | Follow-up Date | Date | When to revisit if needed |
@@ -316,12 +318,12 @@ Tracks all actionable items and unresolved issues extracted from discussions.
 | Field | Type | Notes |
 |-------|------|-------|
 | Name | Title | What needs to be done or discussed |
-| Type | Select | 任務 / 討論待續 |
-| Status | Select | 待處理 / 進行中 / 已完成 / 取消 |
-| Priority | Select | 高 / 中 / 低 |
+| Type | Select | Task / Follow-up Discussion |
+| Status | Select | Pending / In Progress / Completed / Cancelled |
+| Priority | Select | High / Medium / Low |
 | Owner | Rich Text | Who is responsible |
 | Due Date | Date | Deadline |
-| Source | Select | Discussion / Business Core / 自主 / 其他 |
+| Source | Select | Discussion / Business Core / Self-Initiated / Other |
 | Note | Rich Text | Extra context |
 | Related Discussion | Relation → Internal Discussions | Source discussion (auto back-reference) |
 

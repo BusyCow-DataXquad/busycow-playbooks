@@ -13,7 +13,7 @@ An AI-powered content system that helps you find the right sources, get daily to
 Reads your Core Business KB (brand positioning, TA, industry focus) and recommends external blogs, news sites, and newsletters worth tracking as writing inspiration. Suggestions are presented for your approval before being added to the Sources DB. You can also add sources manually at any time.
 
 ### Feature 2 — Daily Topic Briefing
-Every morning at 9am (alongside the Daily CRM Report), the agent scans Active Sources for fresh articles, cross-references your brand KB and target audience, then delivers 3–5 specific topic suggestions — each with a recommended format and angle. Reply "寫第 1 個" to start writing immediately.
+Every morning at 9am (alongside the Daily CRM Report), the agent scans Active Sources for fresh articles, cross-references your brand KB and target audience, then delivers 3–5 specific topic suggestions — each with a recommended format and angle. Reply "Write #1" to start writing immediately.
 
 ### Feature 3 — Content Writing
 Generate any type of content through natural conversation: long-form Blog posts, Social Media posts (LinkedIn, IG, Facebook), Email campaigns, WhatsApp messages, and more. The agent always references the brand KB to ensure tone and positioning consistency. All confirmed content is saved to the Content Library with metadata.
@@ -102,19 +102,19 @@ hermes cron create \
 ## How to Use
 
 **Discover sources:**
-- 「你覺得我們應該追蹤哪些外部來源？」
-- 「加一個新來源：https://example.com」
-- 「暫停追蹤 HBR」
+- "Which external sources do you think we should be tracking?"
+- "Add a new source: https://example.com"
+- "Pause tracking HBR"
 
 **Act on daily briefing:**
-- 「寫第 1 個」
-- 「寫第 2 個，改成 Email 格式」
-- 「第 3 個先存草稿標題，下週再寫」
+- "Write #1"
+- "Write #2, but make it Email format"
+- "Save #3 as a draft title — I'll write it next week"
 
 **Write content on demand:**
-- 「幫我寫一篇 LinkedIn 文，主題是 AI 如何幫業務節省時間」
-- 「根據今天的 Tech in Asia，寫一篇我們的觀點文章」
-- 「幫我準備這個月的 Lead 開發素材，Email + WhatsApp 各一篇」
+- "Write a LinkedIn post about how AI helps sales teams save time"
+- "Based on today's Tech in Asia article, write a perspective piece from our angle"
+- "Prepare this month's lead outreach materials — one Email and one WhatsApp"
 
 ---
 

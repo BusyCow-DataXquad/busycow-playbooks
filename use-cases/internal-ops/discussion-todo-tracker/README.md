@@ -12,7 +12,7 @@ This use case gives the agent a structured way to handle all of it:
 
 1. **Log** — paste meeting notes or describe a conversation in plain language; the agent structures it into a Discussion record
 2. **Extract todos** — any action items get pulled out and logged in Task Tracker with owner and due date
-3. **Preserve open issues** — topics that weren't resolved become "討論待續" tasks so nothing slips through
+3. **Preserve open issues** — topics that weren't resolved become "Pending Follow-up" tasks so nothing slips through
 4. **Update Business Core** — if a discussion changes strategy, pricing, or positioning, the agent updates the relevant KB document directly
 
 ---
@@ -24,7 +24,7 @@ This use case gives the agent a structured way to handle all of it:
 | 1 | Plain-language input | Paste meeting notes or describe a conversation; agent handles structuring |
 | 2 | Key info extraction + Business Core update | Strategy shifts → agent updates KB directly |
 | 3 | Todo extraction | Action items → Task Tracker with owner + deadline |
-| 4 | Open issue preservation | Unresolved topics → "討論待續" tasks |
+| 4 | Open issue preservation | Unresolved topics → "Pending Follow-up" tasks |
 | 5 | Status tracking | Every discussion has a Status — nothing is "done" until it's processed |
 
 ---
@@ -66,12 +66,12 @@ cat config-template/env-template.txt >> ~/.hermes/.env
 
 ## Example interactions
 
-> "週會記錄來了：決定暫緩新加坡市場，Kevin 兩週內整理 Onnet 合約，定價調整下週再討論"
+> "Weekly sync notes: decided to put Singapore market on hold, Kevin to wrap up the Onnet contract within two weeks, pricing adjustment to be discussed next week"
 
-→ Agent creates Discussion record, extracts 1 strategy update (→ Business Core), 1 todo (Kevin / Onnet contract), 1 open issue (pricing → 討論待續 task)
+→ Agent creates Discussion record, extracts 1 strategy update (→ Business Core), 1 todo (Kevin / Onnet contract), 1 open issue (pricing → Pending Follow-up task)
 
 ---
 
-> "上次聊定價的那個議題，結論出來了嗎？"
+> "That pricing topic we discussed last time — did we ever reach a conclusion?"
 
-→ Agent checks Task Tracker for 討論待續 items related to pricing, reports status, asks if you want to schedule a follow-up
+→ Agent checks Task Tracker for Pending Follow-up items related to pricing, reports status, asks if you want to schedule a follow-up

@@ -10,7 +10,7 @@ author: BusyCow
 tags: [Content Intelligence, Content Creation, Notion, Brand, Sources, Daily Report]
 ---
 
-# Content Intelligence — AI 內容智慧系統
+# Content Intelligence — AI Content Intelligence System
 
 ## Overview
 
@@ -49,11 +49,11 @@ Stores all generated content drafts and published pieces. Content body is stored
 | Field | Type | Notes |
 |-------|------|-------|
 | Name | Title | Content title |
-| Type | Select | Email 模板 / WhatsApp/LINE 訊息 / Blog 貼文 / Success Story / 產品更新 / 活動/促銷 |
+| Type | Select | Email Template / WhatsApp/LINE Message / Blog Post / Success Story / Product Update / Event/Promotion |
 | Stage Target | Multi-select | Lead / Qualified / Use Case Confirmed / Closing / All |
 | Industry Target | Multi-select | Client-defined industries + All |
 | Channel | Multi-select | Email / WhatsApp / LINE / LinkedIn / etc. |
-| Status | Select | 草稿 / 可用 / 封存 |
+| Status | Select | Draft / Ready / Archived |
 | Tags | Multi-select | Flexible — match client's content taxonomy |
 | Body | Page blocks | Full content — NEVER in table field |
 
@@ -62,8 +62,8 @@ Stores all generated content drafts and published pieces. Content body is stored
 ## Feature 1 — Source Discovery
 
 ### When to trigger
-- User asks: 「你覺得我們應該追蹤哪些外部來源？」
-- User pastes a URL: 「加這個來源：https://...」
+- User asks: "Which external sources do you think we should be tracking?"
+- User pastes a URL: "Add this source: https://..."
 - Proactively, when Sources DB has fewer than 3 Active sources
 
 ### Workflow — Agent-Suggested Sources
@@ -74,17 +74,17 @@ Stores all generated content drafts and published pieces. Content body is stored
 4. Present for review — **NEVER add sources automatically**:
 
 ```
-📰 根據你們的 KB，我建議追蹤以下來源：
+📰 Based on your KB, I recommend tracking the following sources:
 
 1. [Source Name] — [URL]
-   類型：[Blog / News / Newsletter]
-   語言：[zh-TW / en]
-   為什麼相關：[1 sentence tied to KB topic or TA]
+   Type: [Blog / News / Newsletter]
+   Language: [zh-TW / en]
+   Why it's relevant: [1 sentence tied to KB topic or TA]
 
 2. [Source Name] — [URL]
    ...
 
-要加哪幾個進來？
+Which ones would you like to add?
 ```
 
 5. On confirm: create record in Sources DB with `Status: Active`, `Added By: Agent Suggested`
@@ -93,13 +93,13 @@ Stores all generated content drafts and published pieces. Content body is stored
 
 1. User pastes a URL
 2. Fetch the URL, summarize what it covers
-3. Confirm: 「這個來源主要涵蓋 [topics]，建議語言標籤 [lang]，要加進來嗎？」
+3. Confirm: "This source mainly covers [topics] — suggested language tag: [lang]. Would you like to add it?"
 4. On confirm: create record with `Added By: User`
 
 ### Managing Sources
 
-- 「暫停追蹤 HBR」→ `PATCH /pages/{id}` set `Status: Paused`
-- 「移除這個來源」→ archive the record (`archived: true`)
+- "Pause tracking HBR" → `PATCH /pages/{id}` set `Status: Paused`
+- "Remove this source" → archive the record (`archived: true`)
 
 ---
 
@@ -114,37 +114,37 @@ Schedule: 0 1 * * *
 Prompt (append to Daily CRM Report prompt, or run as separate cron):
 
 ---
-## Content Intelligence 部分
+## Content Intelligence Section
 
-1. 查詢 Sources DB（Status: Active），取所有來源 URL
-2. 對每個來源執行 web_extract，抓取最新 3–5 篇文章標題與摘要
-3. 載入 Core Business KB（品牌定位 + TA）
-4. 從所有來源文章中，挑出最值得寫成內容的 3–5 個主題
-   篩選標準：與品牌 TA 相關 / 可借力表達品牌觀點 / 近期時事加分
-5. 輸出格式：
+1. Query Sources DB (Status: Active), retrieve all source URLs
+2. Run web_extract on each source to fetch the latest 3–5 article titles and summaries
+3. Load Core Business KB (Brand Positioning + TA)
+4. From all source articles, select the 3–5 topics most worth writing about
+   Selection criteria: relevant to brand TA / can be leveraged to express brand perspective / current events a bonus
+5. Output format:
 
-📝 今日可寫主題（Content Intelligence）
+📝 Today's Writing Topics (Content Intelligence)
 
-1️⃣ [主題標題]
-靈感來源：[Source Name]
-為什麼值得寫：[1–2句，說明與品牌/TA的關聯]
-建議格式：[Blog / LinkedIn / IG / Email / WhatsApp]
-建議角度：[具體切入點，1句話]
+1️⃣ [Topic Title]
+Inspiration source: [Source Name]
+Why it's worth writing: [1–2 sentences explaining relevance to brand/TA]
+Recommended format: [Blog / LinkedIn / IG / Email / WhatsApp]
+Recommended angle: [Specific hook, 1 sentence]
 
 2️⃣ ...
 
 3️⃣ ...
 
-💡 回覆「寫第 N 個」或「寫第 N 個，改成 [格式]」即可開始
+💡 Reply "Write #N" or "Write #N as [format]" to get started
 ---
 ```
 
 ### Acting on Briefing
 
 After the briefing is delivered in Telegram, user can reply:
-- 「寫第 1 個」→ execute Feature 3 with the suggested topic + format
-- 「寫第 2 個，改成 Email 格式」→ override format, then execute Feature 3
-- 「第 3 個先存草稿標題，下週再寫」→ create placeholder entry in Content Library (Status: 草稿, empty body)
+- "Write #1" → execute Feature 3 with the suggested topic + format
+- "Write #2 as Email format" → override format, then execute Feature 3
+- "Save #3 as a draft title — I'll write it next week" → create placeholder entry in Content Library (Status: Draft, empty body)
 
 ---
 
@@ -152,24 +152,24 @@ After the briefing is delivered in Telegram, user can reply:
 
 ### Conversational Triggers
 
-- 「寫第 N 個」 (from briefing)
-- 「幫我寫一封開發信給製造業的客戶」
-- 「寫一篇 LinkedIn 文，主題是 AI 如何幫業務節省時間」
-- 「根據今天的 Tech in Asia，幫我寫一篇我們的觀點」
-- 「幫我準備這個月的 Lead 素材，Email + WhatsApp 各一篇」
+- "Write #N" (from briefing)
+- "Write a cold outreach email for manufacturing industry clients"
+- "Write a LinkedIn post about how AI helps sales teams save time"
+- "Based on today's Tech in Asia, write a perspective piece from our angle"
+- "Prepare this month's Lead outreach materials — one Email and one WhatsApp"
 
 ### Step 1 — Clarify (only if request is ambiguous)
 
 ```
-收到！確認幾個細節：
+Got it! Let me confirm a few details:
 
-📌 主題：[restate]
-📄 格式：[Blog / LinkedIn / IG / Email / WhatsApp / ...]
-🎯 目標對象：[from TA KB or user-specified]
-🏷️ Stage：[Lead / Qualified / Closing / All]
-🌐 語言：[zh-TW / en]
+📌 Topic: [restate]
+📄 Format: [Blog / LinkedIn / IG / Email / WhatsApp / ...]
+🎯 Target audience: [from TA KB or user-specified]
+🏷️ Stage: [Lead / Qualified / Closing / All]
+🌐 Language: [zh-TW / en]
 
-這樣對嗎？
+Does this look right?
 ```
 
 If the request is clear enough (e.g. direct continuation from briefing), skip and go to Step 2.
@@ -204,10 +204,10 @@ Rules:
 Present the draft:
 
 ```
-✍️ 內容草稿
+✍️ Content Draft
 
 [TYPE] — [TOPIC]
-目標對象：[audience] | 語言：[lang] | 參考來源：[source or "內部 KB"]
+Target audience: [audience] | Language: [lang] | Reference source: [source or "Internal KB"]
 
 ---
 
@@ -215,24 +215,24 @@ Present the draft:
 
 ---
 
-需要調整嗎？（語氣 / 長度 / 角度）
-確認後存入 Content Library。
+Any adjustments needed? (tone / length / angle)
+Confirm to save to Content Library.
 ```
 
 ### Step 5 — Save to Content Library
 
-After user confirms (or says「直接存」):
+After user confirms (or says "save it directly"):
 
 ```json
 {
   "parent": {"database_id": "CONTENT_LIBRARY_DB"},
   "properties": {
     "Name": {"title": [{"text": {"content": "[Type] — [Topic] — [YYYY-MM-DD]"}}]},
-    "Type": {"select": {"name": "[Email 模板 / Blog 貼文 / WhatsApp/LINE 訊息 / ...]"}},
+    "Type": {"select": {"name": "[Email Template / Blog Post / WhatsApp/LINE Message / ...]"}},
     "Stage Target": {"multi_select": [{"name": "[Lead / All / ...]"}]},
     "Industry Target": {"multi_select": [{"name": "[Industry or All]"}]},
     "Channel": {"multi_select": [{"name": "[Email / WhatsApp / LinkedIn / ...]"}]},
-    "Status": {"select": {"name": "草稿"}}
+    "Status": {"select": {"name": "Draft"}}
   },
   "children": [
     {"object": "block", "type": "paragraph",
@@ -241,28 +241,28 @@ After user confirms (or says「直接存」):
 }
 ```
 
-Confirm: `✅ 已存入 Content Library — [Title]（狀態：草稿）`
+Confirm: `✅ Saved to Content Library — [Title] (Status: Draft)`
 
 ### Batch Writing
 
-**Trigger:** 「幫我準備這個月的 Lead 開發素材，Email + WhatsApp + LinkedIn 各一篇」
+**Trigger:** "Prepare this month's Lead outreach materials — one Email, one WhatsApp, and one LinkedIn post"
 
 1. Clarify once for all pieces (topic/angle/audience)
 2. Load KB + relevant sources once
 3. Generate all pieces sequentially
 4. Present all drafts together for review
 5. Save all confirmed pieces in one batch
-6. Confirm: `✅ 已存入 3 篇內容至 Content Library`
+6. Confirm: `✅ 3 pieces saved to Content Library`
 
 ### Content Refresh
 
-**Trigger:** 「之前那封開發信，幫我改成適合物業管理業的版本」
+**Trigger:** "That cold outreach email we wrote before — can you adapt it for the property management industry?"
 
 1. Search Content Library for the referenced piece
 2. Load original content from page body
 3. Generate updated version
-4. Present diff: 主要修改點 + new draft
-5. On confirm, overwrite page body and reset Status to 草稿
+4. Present diff: key changes summary + new draft
+5. On confirm, overwrite page body and reset Status to Draft
 
 ---
 
@@ -271,7 +271,7 @@ Confirm: `✅ 已存入 Content Library — [Title]（狀態：草稿）`
 1. **Always load KB before writing** — brand positioning and TA must be loaded first
 2. **No hallucinated product claims** — if the KB doesn't mention it, don't make it up
 3. **Sources = inspiration, not copy-paste** — always rewrite in brand voice
-4. **Show draft, get confirm before saving** — unless user says「直接存」
+4. **Show draft, get confirm before saving** — unless user says "save it directly"
 5. **Never auto-add sources** — always present candidates for user approval
 6. **Check for duplicates** — before saving, check if a similar piece exists in Content Library
 7. **CTA required** — every piece needs a clear next step (unless format doesn't call for it)

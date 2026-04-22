@@ -10,7 +10,7 @@ author: BusyCow
 tags: [CRM, Lead Nurturing, Notion, Email, Telegram, Business Card]
 ---
 
-# Lead Nurturing CRM — 客戶關係管理
+# Lead Nurturing CRM — Customer Relationship Management
 
 ## Overview
 
@@ -185,66 +185,66 @@ to fill it in manually.
 The template structure:
 
 ```
-# Part 1 — 客戶資料
+# Part 1 — Client Information
 
-## 📋 客戶概況
+## 📋 Client Overview
 [table: 2 cols, header row]
-| 欄位       | 內容   |
-| 公司名稱   | （待填）|
-| 產業       | （待填）|
-| 規模       | （待填）|
-| 地區       | （待填）|
-| 網站       | （待填）|
-| 介紹人     | （待填）|
+| Field          | Details        |
+| Company Name   | (to be filled) |
+| Industry       | (to be filled) |
+| Company Size   | (to be filled) |
+| Region         | (to be filled) |
+| Website        | (to be filled) |
+| Referred By    | (to be filled) |
 
-## 👥 團隊組成
+## 👥 Team Composition
 [table: 3 cols, header row]
-| 姓名 | 職稱 | 角色 |
-| （待填）| （待填）| Decision Maker / Influencer / Executor |
+| Name           | Title          | Role |
+| (to be filled) | (to be filled) | Decision Maker / Influencer / Executor |
 
-## 🖥️ 現有系統
-- ERP：（待確認）
-- 日常作業工具：（待填）
-- 溝通工具：（待填）
-
----
-
-# Part 2 — Use Case 規劃
-
-## Use Case 1 — （待填）
-- 現況流程：（待填）
-- BCC 解法：（待填）
-- 核心價值：（待填）
-
-## Use Case 2 — （待填）
-- （待填）
+## 🖥️ Existing Systems
+- ERP: (to be confirmed)
+- Daily workflow tools: (to be filled)
+- Communication tools: (to be filled)
 
 ---
 
-# Part 3 — ROI 試算
+# Part 2 — Use Case Planning
 
-## 人力成本試算
-- 月薪：（待填）
-- 每月人力總成本（含勞健保勞退）：（待填）
-- 年度人力成本：（待填）
+## Use Case 1 — (to be filled)
+- Current process: (to be filled)
+- BCC solution: (to be filled)
+- Core value: (to be filled)
 
-## 回本試算
-- 方案 A（初次部署）：回本時間 / 年度淨省 / ROI（待填）
-- 方案 B（初次部署 + 續約）：回本時間 / 年度淨省 / ROI（待填）
-- 第二年起：年度淨省 / ROI（待填）
+## Use Case 2 — (to be filled)
+- (to be filled)
 
 ---
 
-# Part 4 — 潛在升級應用
-1. （待填）
+# Part 3 — ROI Calculation
+
+## Labor Cost Estimate
+- Monthly salary: (to be filled)
+- Total monthly labor cost (including benefits & contributions): (to be filled)
+- Annual labor cost: (to be filled)
+
+## Payback Estimate
+- Plan A (initial deployment): Payback period / Annual net savings / ROI (to be filled)
+- Plan B (initial deployment + renewal): Payback period / Annual net savings / ROI (to be filled)
+- Year 2 onwards: Annual net savings / ROI (to be filled)
+
+---
+
+# Part 4 — Potential Upgrade Applications
+1. (to be filled)
 ```
 
 **Rules:**
 - Write this template immediately after the Deal page is created, before returning to the user
 - Use the Notion API to append blocks to the new Deal's page_id
 - Tables must be created with `table` blocks containing `table_row` children
-- If the user provides client info at the time of Deal creation (company name, team size, etc.), pre-fill the relevant fields instead of leaving them as （待填）
-- After writing the template, confirm to the user: 「Deal 已建立，客戶追蹤模板已套用。」
+- If the user provides client info at the time of Deal creation (company name, team size, etc.), pre-fill the relevant fields instead of leaving them as (to be filled)
+- After writing the template, confirm to the user: "Deal created — client tracking template has been applied."
 
 ### 3. Proactive Field Completion
 
@@ -262,7 +262,7 @@ When adding a new Account or Activity, always check for missing required fields 
 - What's the next step? (Next Action)
 - When should we follow up? (Next Follow-up date)
 
-> Always ask "下一步是什麼？" (What's the next step?) after every reported interaction.
+> Always ask "What's the next step?" after every reported interaction.
 > Record Next Action on the Activity AND update Next Follow-up on the Account.
 
 ### 3. Pipeline Stage Discipline
@@ -309,19 +309,19 @@ The agent should be able to answer conversational queries such as:
 ### Example Report Format
 
 ```
-📋 今日跟進清單（N 位客戶）
+📋 Today's Follow-up List (N clients)
 
 1️⃣ [Company] — [Contact Name] | Stage: [Stage]
-上次互動：[Date]，[One-line summary]
-📌 建議：[Suggested action]（跟進草稿已備好）
+Last interaction: [Date], [One-line summary]
+📌 Suggested action: [Suggested action] (follow-up draft ready)
 
-2️⃣ [Company] — [Contact Name] | Stage: [Stage]，逾期 N 天未互動
-📌 建議：[Suggested action]
+2️⃣ [Company] — [Contact Name] | Stage: [Stage] — N days overdue
+📌 Suggested action: [Suggested action]
 
 ━━━━━━━━━━━━━━━━
-📊 Pipeline 概況
+📊 Pipeline Summary
 Lead: N | Qualified: N | Closing: N | Customer: N
-⚠️ 停滯 7 天以上：N 個客戶
+⚠️ Stalled 7+ days: N clients
 ```
 
 ---
@@ -338,14 +338,14 @@ Lead: N | Qualified: N | Closing: N | Customer: N
 4. Present the full recipient list for confirmation:
 
 ```
-收件人確認（N 位）：
+Recipients confirmed (N total):
 - [Name] | [Company] | [email]
 - [Name] | [Company] | [email]
 
-主旨：[Subject]
-內容摘要：[Summary]
+Subject: [Subject]
+Content summary: [Summary]
 
-確認發送嗎？
+Confirm send?
 ```
 
 5. Only send after the user explicitly confirms
@@ -373,12 +373,12 @@ Reference the client's email config in `~/.hermes/.env`.
 
 2. **Present extracted info** for confirmation:
 ```
-📇 名片資訊
-姓名：[Name]
-職稱：[Title]
-公司：[Company]
-Email：[Email]
-電話：[Phone]
+📇 Business Card Info
+Name: [Name]
+Title: [Title]
+Company: [Company]
+Email: [Email]
+Phone: [Phone]
 ```
 
 3. **Ask context questions** (always ask before importing):
@@ -398,7 +398,7 @@ Email：[Email]
 When the user sends multiple card photos:
 1. Analyze all cards and present a summary list:
 ```
-📇 辨識結果（N 張名片）
+📇 Recognition results (N business cards)
 1. [Name] | [Company] | [Email]
 2. [Name] | [Company] | [Email]
 ...

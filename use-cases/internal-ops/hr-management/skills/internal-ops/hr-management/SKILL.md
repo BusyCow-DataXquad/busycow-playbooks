@@ -9,234 +9,234 @@ author: BusyCow
 tags: [HR, Human Resources, Attendance, Payroll, Notion, Internal Ops]
 ---
 
-# HR 人事管理 — AI 人事行政系統
+# HR Management — AI HR Administration System
 
 ## Overview
 
-把人事行政從「人工追、人工填、人工通知」變成一句話就能查、一句話就能審。
+Transforms HR administration from "track manually, fill manually, notify manually" into actions you can query or approve in a single message.
 
-四個核心功能：
-1. **人員名冊管理** — 對話式查詢與修改員工資料
-2. **出勤與請假查詢** — 查詢出勤紀錄、請假狀態、剩餘年假
-3. **審批處理** — 核准或拒絕請假 / 報帳申請
-4. **薪酬與報帳追蹤** — 查詢薪資發放狀態與報帳審核進度
+Four core features:
+1. **Employee Directory Management** — conversational queries and updates to employee records
+2. **Attendance and Leave Queries** — check attendance records, leave status, and remaining annual leave
+3. **Approval Processing** — approve or reject leave / expense requests
+4. **Payroll and Expense Tracking** — check payroll disbursement status and expense claim progress
 
 ---
 
 ## Notion Databases Required
 
-6 張資料表，全部建在 Internal Ops 工作區下。
+6 tables, all under the Internal Ops workspace.
 
-| 資料表 | 用途 | 審批狀態欄位 |
+| Table | Purpose | Approval Status Field |
 |--------|------|------------|
-| 員工名冊 | 員工基本資料與職涯異動 | 無（純事實） |
-| 出勤紀錄 | 每日上下班時間與加班時數 | 無 |
-| 請假紀錄 | 各類假別申請與審核 | 待核准 / 已核准 / 已拒絕 / 已取消 |
-| 年假管理 | 每位員工年度額度與剩餘天數 | 無 |
-| 薪酬發放紀錄 | 每月薪資明細與發放狀態 | 已發放 / 待發放 / 待確認 |
-| 報帳請款紀錄 | 員工報帳申請與審核流程 | 待送出 / 待審核 / 審核中 / 已核准 / 已退回 / 已報銷 |
+| Employee Directory | Employee basic info and employment history | None (factual only) |
+| Attendance Records | Daily clock-in/out times and overtime hours | None |
+| Leave Requests | All leave type applications and approvals | Pending / Approved / Rejected / Cancelled |
+| Annual Leave | Annual quota and remaining days per employee | None |
+| Payroll Records | Monthly payroll breakdown and disbursement status | Paid / Pending / Awaiting Confirmation |
+| Expense Claims | Employee expense submissions and approval workflow | Draft / Pending Review / Under Review / Approved / Rejected / Reimbursed |
 
-> 審批狀態直接內嵌在請假紀錄與報帳請款紀錄中，不需要獨立審批表。
+> Approval status is embedded directly in Leave Requests and Expense Claims — no separate approval table needed.
 
-### 員工名冊 Schema
+### Employee Directory Schema
 
-| 欄位 | 類型 | 說明 |
+| Field | Type | Notes |
 |------|------|------|
-| 員工姓名 | Title | |
-| 英文名 | Rich Text | |
-| 員工編號 | Rich Text | 格式：EMP-001 |
-| 部門 | Select | 業務 / 工程 / 產品 / 設計 / 人資 / 營運 |
-| 職稱 | Rich Text | |
-| 到職日 | Date | |
-| 離職日 | Date | 在職員工留空 |
-| 狀態 | Select | 在職 / 試用 / 留職停薪 / 離職 |
-| 備註 | Rich Text | |
+| Employee Name | Title | |
+| English Name | Rich Text | |
+| Employee ID | Rich Text | Format: EMP-001 |
+| Department | Select | Sales / Engineering / Product / Design / HR / Operations |
+| Job Title | Rich Text | |
+| Start Date | Date | |
+| End Date | Date | Leave blank for active employees |
+| Status | Select | Active / Probation / Leave of Absence / Resigned |
+| Notes | Rich Text | |
 
-### 出勤紀錄 Schema
+### Attendance Records Schema
 
-| 欄位 | 類型 | 說明 |
+| Field | Type | Notes |
 |------|------|------|
-| 出勤紀錄 | Title | 格式：A-YYYY-MMDD-姓 |
-| 員工 | Relation → 員工名冊 | |
-| 上班時間 | Date (datetime) | |
-| 下班時間 | Date (datetime) | |
-| 累計加班時數 | Number | 單位：小時 |
-| 加班事由 | Rich Text | |
+| Attendance Record | Title | Format: A-YYYY-MMDD-[surname] |
+| Employee | Relation → Employee Directory | |
+| Clock-In Time | Date (datetime) | |
+| Clock-Out Time | Date (datetime) | |
+| Total Overtime Hours | Number | Unit: hours |
+| Overtime Reason | Rich Text | |
 
-### 請假紀錄 Schema
+### Leave Requests Schema
 
-| 欄位 | 類型 | 說明 |
+| Field | Type | Notes |
 |------|------|------|
-| 請假單 | Title | 格式：L-YYYY-NNNN 姓名 假別 |
-| 員工 | Relation → 員工名冊 | |
-| 假別 | Select | 年假 / 特休 / 病假 / 事假 / 公假 / 補休 / 其他 |
-| 起始日 | Date | |
-| 結束日 | Date | |
-| 天數 | Number | 支援 0.5 天 |
-| 原因 | Rich Text | |
-| 狀態 | Select | 待核准 / 已核准 / 已拒絕 / 已取消 |
+| Leave Request | Title | Format: L-YYYY-NNNN [name] [leave-type] |
+| Employee | Relation → Employee Directory | |
+| Leave Type | Select | Annual / Paid Leave / Sick / Personal / Public Duty / Compensatory / Other |
+| Start Date | Date | |
+| End Date | Date | |
+| Days | Number | Supports 0.5 days |
+| Reason | Rich Text | |
+| Status | Select | Pending / Approved / Rejected / Cancelled |
 
-### 年假管理 Schema
+### Annual Leave Schema
 
-| 欄位 | 類型 | 說明 |
+| Field | Type | Notes |
 |------|------|------|
-| 年假計算 | Title | 格式：YYYY-姓名 |
-| 員工 | Relation → 員工名冊 | |
-| 年度 | Rich Text | |
-| 年假總天數 | Number | |
-| 已使用天數 | Number | |
-| 剩餘天數 | Number | |
-| 備註 | Rich Text | 如「留職停薪中」 |
+| Annual Leave Record | Title | Format: YYYY-[name] |
+| Employee | Relation → Employee Directory | |
+| Year | Rich Text | |
+| Total Annual Leave Days | Number | |
+| Used Days | Number | |
+| Remaining Days | Number | |
+| Notes | Rich Text | e.g. "On leave of absence" |
 
-### 薪酬發放紀錄 Schema
+### Payroll Records Schema
 
-| 欄位 | 類型 | 說明 |
+| Field | Type | Notes |
 |------|------|------|
-| 薪酬單 | Title | 格式：P-YYYY-MM-姓名 |
-| 員工 | Relation → 員工名冊 | |
-| 月份 | Rich Text | 格式：YYYY-MM |
-| 底薪 | Number | |
-| 加班費 | Number | |
-| 津貼 | Number | |
-| 扣款 | Number | |
-| 實發金額 | Number | |
-| 發放狀態 | Select | 已發放 / 待發放 / 待確認 |
+| Payroll Record | Title | Format: P-YYYY-MM-[name] |
+| Employee | Relation → Employee Directory | |
+| Month | Rich Text | Format: YYYY-MM |
+| Base Salary | Number | |
+| Overtime Pay | Number | |
+| Allowances | Number | |
+| Deductions | Number | |
+| Net Pay | Number | |
+| Disbursement Status | Select | Paid / Pending / Awaiting Confirmation |
 
-### 報帳請款紀錄 Schema
+### Expense Claims Schema
 
-| 欄位 | 類型 | 說明 |
+| Field | Type | Notes |
 |------|------|------|
-| 報帳項目 | Title | 描述性名稱 |
-| 員工 | Relation → 員工名冊 | |
-| 類別 | Select | 差旅 / 交通 / 餐飲 / 住宿 / 軟體/訂閱 / 辦公用品 / 其他 |
-| 報帳日期 | Date | |
-| 金額 | Number | |
-| 狀態 | Select | 待送出 / 待審核 / 審核中 / 已核准 / 已退回 / 已報銷 |
-| 備註 | Rich Text | 附件說明、退回原因等 |
-| 成本歸類 | Select | OPEX / COGS / 無 |
-| 計入雜支 | Checkbox | |
+| Expense Item | Title | Descriptive name |
+| Employee | Relation → Employee Directory | |
+| Category | Select | Travel / Transportation / Meals / Accommodation / Software/Subscriptions / Office Supplies / Other |
+| Expense Date | Date | |
+| Amount | Number | |
+| Status | Select | Draft / Pending Review / Under Review / Approved / Rejected / Reimbursed |
+| Notes | Rich Text | Attachment notes, rejection reasons, etc. |
+| Cost Classification | Select | OPEX / COGS / None |
+| Misc Expense | Checkbox | |
 
 ---
 
-## Feature 1 — 人員名冊管理
+## Feature 1 — Employee Directory Management
 
 ### Conversational Triggers
 
-- 「林采恩什麼時候到職？現在年資多久了？」
-- 「現在有誰是留職停薪狀態？」
-- 「幫我把王柏凱的職稱更新成資深營運，異動日期今天」
-- 「幫我新增一位員工：黃怡婷，業務部，到職日 5/1」
+- "When did Lin Tsai-En join? How long have they been with the company?"
+- "Who is currently on leave of absence?"
+- "Update Wang Bo-Kai's job title to Senior Operations, effective today"
+- "Add a new employee: Huang Yi-Ting, Sales department, start date 5/1"
 
 ### Workflow
 
-1. 查詢時：POST /databases/{員工名冊_DB}/query，依姓名、部門或狀態篩選
-2. 修改時：PATCH /pages/{page_id}，確認異動內容後更新
-3. 新增時：主動追問缺漏欄位（部門、職稱、到職日至少要有），確認後 POST /pages
+1. Query: POST /databases/{HR_EMPLOYEES_DB}/query — filter by name, department, or status
+2. Update: PATCH /pages/{page_id} — confirm changes before applying
+3. Add new: proactively ask for missing fields (department, job title, start date at minimum), then POST /pages after confirmation
 
-回應格式（查詢）：
+Response format (query):
 ```
-👤 王柏凱（EMP-005）
-部門：營運 | 職稱：Operations Specialist
-到職日：2022-11-21 | 年資：約 3 年 5 個月
-狀態：留職停薪中
-```
-
----
-
-## Feature 2 — 出勤與請假查詢
-
-### Conversational Triggers
-
-- 「4 月 21 日有誰請假？」
-- 「林采恩三月的加班時數總計多少？」
-- 「張雅筑今年還剩幾天年假？」
-- 「這個月有哪些補休還沒休完？」
-
-### Workflow
-
-**請假查詢：**
-- POST /databases/{請假紀錄_DB}/query，filter by 起始日 / 假別 / 員工
-- 查年假：POST /databases/{年假管理_DB}/query，filter by 員工
-
-**出勤查詢：**
-- POST /databases/{出勤紀錄_DB}/query，filter by 員工 + 日期範圍
-- 加總累計加班時數
-
-回應格式（請假查詢）：
-```
-📋 4 月 21 日請假名單：
-• 張雅筑 — 事假 1 天（狀態：待核准）
-
-年假剩餘（張雅筑）：7 天（2026 年度）
+👤 Wang Bo-Kai (EMP-005)
+Department: Operations | Job Title: Operations Specialist
+Start Date: 2022-11-21 | Tenure: ~3 years 5 months
+Status: On Leave of Absence
 ```
 
 ---
 
-## Feature 3 — 審批處理
+## Feature 2 — Attendance and Leave Queries
 
 ### Conversational Triggers
 
-- 「現在有哪些請假待核准？」
-- 「核准張雅筑的事假申請（L-2026-0005）」
-- 「台北出差高鐵那筆報帳現在什麼狀態？」
-- 「這個月哪些報帳還在待審核或審核中？」
+- "Who is on leave on April 21?"
+- "What is Lin Tsai-En's total overtime hours for March?"
+- "How many annual leave days does Chang Ya-Ju have left this year?"
+- "Which compensatory leave has not been used this month?"
 
 ### Workflow
 
-**查詢待處理：**
-- POST /databases/{請假紀錄_DB}/query，filter: 狀態 = 待核准
-- POST /databases/{報帳請款紀錄_DB}/query，filter: 狀態 in [待審核, 審核中, 已退回]
+**Leave queries:**
+- POST /databases/{HR_LEAVE_DB}/query — filter by Start Date / Leave Type / Employee
+- Annual leave: POST /databases/{HR_ANNUAL_LEAVE_DB}/query — filter by Employee
 
-**執行審批：**
-1. 找到對應記錄的 page_id
-2. 確認：「確定要核准 [申請人] 的 [假別/項目]（[日期/金額]）嗎？」
-3. 收到確認後：PATCH /pages/{page_id} 更新狀態欄位
+**Attendance queries:**
+- POST /databases/{HR_ATTENDANCE_DB}/query — filter by Employee + date range
+- Sum Total Overtime Hours
 
-**審批狀態對照：**
-- 請假：待核准 → 已核准 / 已拒絕
-- 報帳：待審核 / 審核中 → 已核准 / 已退回 / 已報銷
+Response format (leave query):
+```
+📋 Leave on April 21:
+• Chang Ya-Ju — Personal Leave 1 day (Status: Pending)
 
-> 重要：不能跳過確認直接審批，必須先讓 HR 或主管確認再更新。
+Remaining Annual Leave (Chang Ya-Ju): 7 days (2026)
+```
 
 ---
 
-## Feature 4 — 薪酬與報帳追蹤
+## Feature 3 — Approval Processing
 
 ### Conversational Triggers
 
-- 「3 月份薪資有哪些還是待發放狀態？」
-- 「差旅住宿（台中）那筆報帳被退回了，原因是什麼？」
-- 「陳昱廷 3 月實發多少？加班費是多少？」
-- 「這個月哪些報帳還在待審核或審核中？」
+- "What leave requests are currently pending approval?"
+- "Approve Chang Ya-Ju's personal leave request (L-2026-0005)"
+- "What is the status of the Taipei business trip HSR expense claim?"
+- "Which expense claims this month are still pending or under review?"
 
 ### Workflow
 
-**薪資查詢：**
-- POST /databases/{薪酬發放紀錄_DB}/query，filter by 月份 + 發放狀態
-- 列出員工姓名、底薪、加班費、津貼、扣款、實發金額
+**Query pending items:**
+- POST /databases/{HR_LEAVE_DB}/query — filter: Status = Pending
+- POST /databases/{HR_EXPENSE_DB}/query — filter: Status in [Pending Review, Under Review, Rejected]
 
-**報帳查詢：**
-- POST /databases/{報帳請款紀錄_DB}/query，filter by 員工 / 狀態 / 類別
-- 退回原因在備註欄位中
+**Execute approval:**
+1. Locate the page_id of the relevant record
+2. Confirm: "Are you sure you want to approve [applicant]'s [leave type/item] ([date/amount])?"
+3. After confirmation: PATCH /pages/{page_id} to update the Status field
 
-回應格式（薪資）：
+**Approval status transitions:**
+- Leave: Pending → Approved / Rejected
+- Expense: Pending Review / Under Review → Approved / Rejected / Reimbursed
+
+> Important: Never skip the confirmation step — HR or the manager must confirm before any update is applied.
+
+---
+
+## Feature 4 — Payroll and Expense Tracking
+
+### Conversational Triggers
+
+- "Which March payroll entries are still in pending status?"
+- "The business trip accommodation (Taichung) expense claim was rejected — what was the reason?"
+- "What was Chen Yu-Ting's net pay for March? What was the overtime pay?"
+- "Which expense claims this month are still pending or under review?"
+
+### Workflow
+
+**Payroll queries:**
+- POST /databases/{HR_PAYROLL_DB}/query — filter by Month + Disbursement Status
+- List employee name, base salary, overtime pay, allowances, deductions, net pay
+
+**Expense queries:**
+- POST /databases/{HR_EXPENSE_DB}/query — filter by Employee / Status / Category
+- Rejection reasons are in the Notes field
+
+Response format (payroll):
 ```
-💰 2026-03 薪資發放狀況：
-待發放：
-• 林采恩 — 實發 NT$51,200（底薪 45,000 + 加班費 4,200 + 津貼 2,000）
+💰 2026-03 Payroll Status:
+Pending:
+• Lin Tsai-En — Net Pay NT$51,200 (Base 45,000 + Overtime 4,200 + Allowances 2,000)
 
-已發放：4 筆（略）
+Paid: 4 entries (omitted)
 ```
 
 ---
 
 ## Behavioral Rules
 
-1. **確認再改** — 所有修改（狀態更新、資料修改）都要先顯示確認訊息，收到確認後才執行
-2. **追問缺欄** — 新增員工或記錄時，若缺少必要欄位（部門、到職日等），主動追問
-3. **審批不跳過** — 審批操作必須列出申請人、項目、日期 / 金額，確認後才更新
-4. **不猜員工** — 若姓名有歧義（如「張小姐」），先查詢確認是哪位員工再操作
-5. **敏感資料謹慎** — 薪資明細僅在明確詢問時顯示，不在概覽查詢中主動展開
+1. **Confirm before changing** — all updates (status changes, data edits) must display a confirmation message first; only execute after confirmation is received
+2. **Ask for missing fields** — when adding an employee or record, proactively ask for any required fields that are missing (department, start date, etc.)
+3. **No skipping approval confirmation** — approval actions must list the applicant, item, and date/amount; only update after confirmation
+4. **Never guess on employee identity** — if a name is ambiguous (e.g. "Ms. Chang"), query first to confirm which employee before proceeding
+5. **Handle sensitive data carefully** — salary details are only shown when explicitly requested; never expand them in overview queries
 
 ---
 
@@ -244,13 +244,13 @@ tags: [HR, Human Resources, Attendance, Payroll, Notion, Internal Ops]
 
 ```
 # Notion
-NOTION_TOKEN=                         # Notion integration token
+NOTION_TOKEN=*** Notion integration token
 
 # HR Databases
-HR_EMPLOYEES_DB=                      # 員工名冊 DB ID
-HR_ATTENDANCE_DB=                     # 出勤紀錄 DB ID
-HR_LEAVE_DB=                          # 請假紀錄 DB ID
-HR_ANNUAL_LEAVE_DB=                   # 年假管理 DB ID
-HR_PAYROLL_DB=                        # 薪酬發放紀錄 DB ID
-HR_EXPENSE_DB=                        # 報帳請款紀錄 DB ID
+HR_EMPLOYEES_DB=                      # Employee Directory DB ID
+HR_ATTENDANCE_DB=                     # Attendance Records DB ID
+HR_LEAVE_DB=                          # Leave Requests DB ID
+HR_ANNUAL_LEAVE_DB=                   # Annual Leave DB ID
+HR_PAYROLL_DB=                        # Payroll Records DB ID
+HR_EXPENSE_DB=                        # Expense Claims DB ID
 ```
