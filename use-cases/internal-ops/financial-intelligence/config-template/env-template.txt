@@ -1,7 +1,7 @@
 # Notion
-NOTION_TOKEN=                         # Notion integration token
+NOTION_TOKEN=                         # Notion integration token (from notion.so/my-integrations)
 
-# Finance Databases (get IDs from Notion URL)
+# Finance Databases — get IDs from Notion URL (32-char hex after last /)
 FINANCE_COA_DB=                       # Chart of Accounts DB ID
 FINANCE_GL_DB=                        # General Ledger DB ID
 FINANCE_AR_DB=                        # Accounts Receivable DB ID
@@ -10,4 +10,4 @@ FINANCE_BANK_DB=                      # Bank Feeds DB ID
 
 # Telegram (for weekly/monthly automated reports)
 FINANCE_TELEGRAM_CHAT_ID=             # e.g. -100XXXXXXXXX
-FINANCE_TELEGRAM_THREAD_ID=           # Thread/topic ID
+FINANCE_TELEGRAM_THREAD_ID=           # Thread/topic ID for finance reports

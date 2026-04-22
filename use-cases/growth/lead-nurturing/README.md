@@ -1,60 +1,61 @@
-# Lead & Partners Nurturing — Use Case
+# Lead & Partner Nurturing — Use Case
 
-An AI-powered CRM assistant for managing customer leads and partner relationships through natural conversation.
-Log interactions, track pipeline stages, maintain partner relationships, generate quotations and contracts, send daily briefings, and run personalized outreach — all via chat.
+Small and medium businesses lose deals not because they lack leads, but because follow-up falls through the cracks. When sales conversations, next steps, and relationship history live in spreadsheets, WhatsApp threads, and people's heads, nothing gets acted on consistently. The Lead & Partner Nurturing use case gives your team a conversational CRM assistant: just tell it what happened, and it handles the logging, tracking, and follow-up planning — no manual Notion editing required.
 
-**Category:** Growth
-**Data Foundation Required:** [Growth](../../data-foundation/growth/README.md)
+This use case covers both customer leads and partner relationships in a single unified system. Log a call, check a pipeline stage, run a morning briefing, send bulk outreach, or import a stack of business cards from a trade show — all through natural chat with Hermes.
 
 ---
 
-## What This Use Case Does
+## Features
 
-- **Conversational CRM** — log and query leads, contacts, and partner data through natural chat; not just lead tracking but also partner relationship maintenance and progress follow-up (no manual Notion editing required)
-- **Automated daily morning briefing** with personalized follow-up drafts saved to Content Library, covering both pending leads and partner check-ins
-- **Bulk personalized email outreach** by pipeline stage or industry
-- **Quotation generation** — automatically produce structured quotations (line items, pricing, validity period) based on client requirements, with version control and multi-currency support
-- **Contract generation** — apply contract templates to closing deals, auto-fill client data, service terms, payment schedule and duration, output a signable document, and log contract status back to CRM
-- **Business card image recognition** and auto-import to Contacts
-
----
-
-## Required Data Tables
-
-Install these tables from `data-foundation/growth/` before activating this use case:
-
-| Table | Layer | Purpose |
-|-------|-------|---------|
-| Accounts | Fact | Companies, leads, and partners |
-| Contacts | Fact | Individual people |
-| Activities | Record | Every interaction logged here (leads and partners) |
-| Deals | Relationship | Pipeline and stages |
-| Partnership | Relationship | Partner relationships and collaboration status |
-| Content Library | Standalone | Follow-up drafts, quotation templates, contracts |
+- **Conversational CRM Logging** — Report interactions in plain language; agent logs to Notion automatically and asks for any missing fields
+- **Deal Page Template Auto-Apply** — Every new Deal page gets a structured client tracking template written in automatically
+- **Proactive Field Completion** — Agent checks for missing fields when creating Accounts or Activities and asks before saving
+- **Pipeline Stage Discipline** — Stage advances only on explicit user confirmation; all changes are logged in Activities
+- **Query Support** — Ask anything: who needs follow-up, what stage a company is at, which partners have gone quiet
+- **Daily Morning Report** — Scheduled briefing covering today's follow-up targets, suggested actions, and pipeline health summary; delivered to Telegram
+- **Bulk Email Outreach** — Send personalized campaigns by pipeline stage, industry, or custom filter; confirmation required before sending
+- **Business Card Import** — Send a card photo; agent extracts info, asks context questions, and imports to Contacts (and Accounts if new)
 
 ---
 
-## Setup Steps
+## What's in This Package
 
-### Step 1 — Create Notion Databases
+| File | Purpose |
+|------|---------|
+| README.md | This file — human overview, features, and install steps |
+| SETUP.md | Agent-facing setup instructions — run once during onboarding |
+| SKILL.md | Agent-facing daily operating instructions — loaded on every use |
+| config-template/env-template.txt | Environment variable template — copy and fill in |
 
-Follow `data-foundation/growth/README.md` to create the 6 required tables.
-Share all databases with your Notion integration.
+---
 
-### Step 2 — Install the Skill
+## Install Steps
+
+### Step 1 — Copy config template
 
 ```bash
-cp -r skills/growth/lead-nurturing ~/.hermes/skills/growth/
+cp use-cases/growth/lead-nurturing/config-template/env-template.txt ~/.hermes/.env
 ```
 
-### Step 3 — Configure
+Open `~/.hermes/.env` and fill in all values. Leave anything unknown blank for now — SETUP.md will guide the agent through finding or creating databases.
+
+### Step 2 — Copy SKILL.md to your Hermes skills folder
 
 ```bash
-cat config-template/env-template.txt >> ~/.hermes/.env
-# Fill in all values
+mkdir -p ~/.hermes/skills/growth/lead-nurturing
+cp use-cases/growth/lead-nurturing/SKILL.md ~/.hermes/skills/growth/lead-nurturing/SKILL.md
 ```
 
-### Step 4 — Set Up Daily Report (Optional)
+### Step 3 — Run the setup
+
+Tell Hermes:
+
+> "Run the Lead Nurturing setup — use SETUP.md from the lead-nurturing use case."
+
+The agent will search for existing Notion databases, help create any that are missing, adapt schemas to add recommended fields, and save all IDs to `~/.hermes/.env`.
+
+### Step 4 — Set up daily report (optional)
 
 ```bash
 hermes cron create \
@@ -63,51 +64,11 @@ hermes cron create \
   --prompt "Generate the daily CRM follow-up report and send to Telegram"
 ```
 
-### Step 5 — Set Up Telegram
+Adjust the schedule to match your timezone (01:00 UTC = 09:00 Taiwan time).
 
-1. Create a bot via @BotFather, copy the bot token
-2. Add the bot to your team group
-3. Note the chat ID and thread ID for the daily report
+### Step 5 — Set up Telegram
 
----
-
-## How to Use
-
-**Log a lead interaction:**
-- "Just got off the phone with Alex — he said we can schedule the Use Case confirmation next week"
-
-**Log a partner interaction:**
-- "Just wrapped up a meeting with TechBridge — they said they'll refer two more clients next month"
-
-**Query pipeline:**
-- "Which clients haven't been contacted in over three days?"
-- "What stage is GreenBridge at right now?"
-- "Which partners had no interactions last month?"
-
-**Generate a quotation:**
-- "Create a quotation for NovaTech — standard deployment package, 50,000 HKD, valid for 30 days"
-
-**Generate a contract:**
-- "GreenBridge is ready to sign — generate a contract using the standard template and fill in their details"
-
-**Import a business card:**
-- Send a photo of the card — agent extracts info, confirms, and creates Contact
-
-**Run outreach:**
-- "Send a cold outreach email to all clients in the Qualified stage"
-
----
-
-## Folder Structure
-
-```
-lead-nurturing/
-├── README.md
-├── skills/
-│   └── growth/
-│       └── lead-nurturing/
-│           └── SKILL.md          ← Install this
-└── config-template/
-    ├── config.yaml
-    └── env-template.txt
-```
+1. Create a bot via @BotFather and copy the bot token
+2. Add the bot to your team group or channel
+3. Note the Chat ID and Thread ID (if using topics)
+4. Add `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`, and `TELEGRAM_THREAD_ID` to `~/.hermes/.env`

@@ -1,26 +1,27 @@
-# Environment Variables — Content Creation Playbook
-# Copy relevant lines to ~/.hermes/.env and fill in values
+# Environment Variables — Content Intelligence
+# Copy to ~/.hermes/.env and fill in all values
+# Run SETUP.md first — it will help you find or create databases and pages and fill in these IDs
 
 # Notion
 NOTION_TOKEN=your_notion_integration_token
 
-# Knowledge Base — Option A: Notion Pages
-# Get page IDs from the Notion page URL
+# Knowledge Base (Notion Page IDs — from page URL)
 KB_BRAND_POSITIONING_PAGE_ID=your_brand_positioning_page_id
 KB_TARGET_AUDIENCE_PAGE_ID=your_target_audience_page_id
 KB_PRICING_PAGE_ID=your_pricing_page_id
 KB_PRODUCT_PAGE_ID=your_product_overview_page_id
 
-# Knowledge Base — Option B: Local Markdown Files
-# Copy knowledge-base-template/*.md to ~/.hermes/kb/ and fill them in
-# (No env vars needed — agent reads from ~/.hermes/kb/ directly)
-
-# Content Library
+# Notion Databases
+SOURCES_DB=your_sources_database_id
 CONTENT_LIBRARY_DB=your_content_library_database_id
 
 # Content Styling Guide (standalone Notion page — not a database)
 CONTENT_STYLING_GUIDE_PAGE_ID=your_content_styling_guide_page_id
 
-# Content Defaults
-CONTENT_LANGUAGE=zh-TW         # Default output language: zh-TW / en / etc.
-BRAND_TONE=professional         # Tone: professional / friendly / technical / casual
+# Telegram (for daily briefing delivery)
+TELEGRAM_BOT_TOKEN=your_telegram_bot_token
+CONTENT_TELEGRAM_CHAT_ID=your_telegram_chat_id
+CONTENT_TELEGRAM_THREAD_ID=your_telegram_thread_id
+
+# Defaults
+CONTENT_LANGUAGE=zh-TW                 # Default output language: zh-TW / en / etc.

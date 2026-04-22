@@ -1,153 +1,70 @@
 # Content Intelligence — Use Case
 
-An AI-powered content system that helps you find the right sources, get daily topic suggestions, generate on-brand content, and maintain a consistent brand style — all grounded in your company's knowledge base and saved automatically to Notion.
+Creating consistent, on-brand content is one of the most time-consuming tasks for small business teams. Without a system, posts get written in a rush, brand voice drifts across channels, and good topic ideas get lost because nobody had time to act on them. The Content Intelligence use case gives your team an AI content assistant that already knows your brand: it monitors relevant external sources, delivers fresh topic ideas every morning, and writes on-brand content — grounded in your company knowledge base — ready to publish or tweak.
 
-**Category:** Growth
-**Data Foundation Required:** [Growth](../../data-foundation/growth/README.md) — Content Library only
-
----
-
-## What This Use Case Does
-
-### Feature 1 — Source Discovery
-Reads your Core Business KB (brand positioning, TA, industry focus) and recommends external blogs, news sites, and newsletters worth tracking as writing inspiration. Suggestions are presented for your approval before being added to the Sources DB. You can also add sources manually at any time.
-
-### Feature 2 — Daily Topic Briefing
-Every morning at 9am (alongside the Daily CRM Report), the agent scans Active Sources for fresh articles, cross-references your brand KB and target audience, then delivers 3–5 specific topic suggestions — each with a recommended format and angle. Reply "Write #1" to start writing immediately.
-
-### Feature 3 — Content Writing
-Generate any type of content through natural conversation: long-form Blog posts, Social Media posts (LinkedIn, IG, Facebook), Email campaigns, WhatsApp messages, and more. The agent always references the brand KB and Content Styling Guide to ensure tone and positioning consistency. All confirmed content is saved to the Content Library with metadata.
-
-### Feature 4 — Content Styling Guide
-A standalone document page where you define how your brand writes. Fill it in through conversation with the agent or edit it directly. The agent loads it automatically whenever drafting content.
-
-Covers:
-- **Brand voice & tone** — overall style, preferred expressions, words to avoid, target reader
-- **Post format preferences** — length, structure, opening/closing style, emoji and hashtag usage
-- **Platform-specific rules** — per-platform format and special rules (LinkedIn, Facebook, Instagram, Blog, etc.)
-- **SEO keywords** — primary, secondary, and keywords to avoid
-- **AEO (AI Engine Optimization)** — target questions for AI assistants, authority topics, preferred answer format
-- **Special requirements** — legal/compliance constraints, regional considerations, custom rules
+Every piece of content this assistant produces is anchored to your brand positioning, target audience, and content styling guide. It will never invent product claims or copy-paste from sources. It shows you a draft and waits for your approval before saving anything.
 
 ---
 
-## Required Data Tables
+## Features
 
-Install these tables from `data-foundation/growth/` before activating this use case:
-
-| Table | Layer | Purpose |
-|-------|-------|---------|
-| Content Library | Standalone | Stores all generated content |
-
-> **Also required (create separately):** Sources DB — tracks external sources to monitor. Schema below.
-
-**Sources DB schema:**
-
-| Field | Type | Notes |
-|-------|------|-------|
-| Name | Title | Source name (e.g. "Tech in Asia") |
-| URL | URL | Homepage or RSS feed URL |
-| Type | Select | Blog / News / Newsletter / Industry Report |
-| Topics | Multi-select | Content themes covered |
-| Language | Select | en / zh-TW / zh-HK / etc. |
-| Status | Select | Active / Paused |
-| Added By | Select | User / Agent Suggested |
-| Last Fetched | Date | Auto-updated by agent |
-| Notes | Rich Text | Why this source is relevant |
+- **Source Discovery** — recommends external blogs, news sites, and newsletters relevant to your business; presents candidates for your approval before adding anything
+- **Daily Topic Briefing** — every morning, scans active sources and delivers 3–5 specific topic suggestions with recommended format and angle; reply "Write #1" to start immediately
+- **Content Writing** — generates Blog posts, LinkedIn, Instagram, Facebook, Email campaigns, WhatsApp messages, and more; always loads the brand KB and Content Styling Guide first
+- **Content Styling Guide** — a Notion page where your brand's voice, format rules, SEO keywords, AEO targets, and platform-specific rules are defined; loaded automatically before every draft; updated via conversation
 
 ---
 
-## Required Knowledge Base
+## What's in This Package
 
-This use case reads from your Core Business KB and Content Styling Guide to generate on-brand content.
-Ensure the following are filled in and accessible:
-
-| KB Document | Why It's Needed |
-|-------------|----------------|
-| Brand Identity | Sets tone, voice, and positioning for all content |
-| Target Audience | Informs who the content is written for |
-| Offer | Grounds product/service mentions in accurate detail |
-| Content Styling Guide | Defines post format, platform rules, SEO/AEO keywords, and special requirements |
-
-See `data-foundation/core-business/` for setup instructions.
-
-> **Content Styling Guide** is a standalone Notion page (not a database). Create it once and share it with your Hermes integration. Users can update it anytime through conversation or by editing directly.
+| File | Purpose |
+|------|---------|
+| README.md | This file — human overview, features, and install steps |
+| SETUP.md | Agent-facing setup instructions — run once during onboarding |
+| SKILL.md | Agent-facing daily operating instructions — loaded on every use |
+| config-template/env-template.txt | Environment variable template — copy and fill in |
 
 ---
 
-## Setup Steps
+## Install Steps
 
-### Step 1 — Prepare Knowledge Base
-
-Fill in `data-foundation/core-business/templates/` and set up as Notion pages or local files.
-
-### Step 2 — Create Notion Databases
-
-1. Create Content Library from `data-foundation/growth/README.md`
-2. Create Sources DB (schema above) — share both with your Notion integration
-
-### Step 3 — Install the Skill
+### Step 1 — Copy config template
 
 ```bash
-cp -r skills/growth/content-intelligence ~/.hermes/skills/growth/
+cp use-cases/growth/content-intelligence/config-template/env-template.txt ~/.hermes/.env
 ```
 
-### Step 4 — Configure
+Open `~/.hermes/.env` and fill in whatever values you already know. Leave the rest blank — SETUP.md will guide the agent through finding or creating everything.
+
+### Step 2 — Copy SKILL.md to your Hermes skills folder
 
 ```bash
-cat config-template/env-template.txt >> ~/.hermes/.env
-# Fill in NOTION_TOKEN, SOURCES_DB, CONTENT_LIBRARY_DB, KB page IDs
+mkdir -p ~/.hermes/skills/growth/content-intelligence
+cp use-cases/growth/content-intelligence/SKILL.md ~/.hermes/skills/growth/content-intelligence/SKILL.md
 ```
 
-### Step 5 — Set Up Daily Briefing (Optional)
+### Step 3 — Run the setup
 
-The agent will guide you through setting up the daily cron job on first run, or you can set it up manually:
+Tell Hermes:
+
+> "Run the Content Intelligence setup — use SETUP.md from the content-intelligence use case."
+
+The agent will search for existing Notion databases and pages, help create anything missing (including the Content Styling Guide), adapt schemas to add recommended fields, and save all IDs to `~/.hermes/.env`.
+
+### Step 4 — Set up daily topic briefing (optional)
 
 ```bash
-# Daily 9am Taiwan time (01:00 UTC)
 hermes cron create \
   --schedule "0 1 * * *" \
   --name "content-intelligence-daily" \
   --prompt "Run the Content Intelligence daily briefing: scan Active Sources, suggest 3-5 topics grounded in KB, deliver to Telegram."
 ```
 
----
+Adjust the schedule to match your timezone (01:00 UTC = 09:00 Taiwan time).
 
-## How to Use
+### Step 5 — Set up Telegram
 
-**Discover sources:**
-- "Which external sources do you think we should be tracking?"
-- "Add a new source: https://example.com"
-- "Pause tracking HBR"
-
-**Act on daily briefing:**
-- "Write #1"
-- "Write #2, but make it Email format"
-- "Save #3 as a draft title — I'll write it next week"
-
-**Set up Content Styling Guide:**
-- "Set up our content style — let's go through it together"
-- "Update our SEO keywords to include: AI agents, SME automation"
-- "Change our LinkedIn post length preference to under 200 words"
-- "Add a compliance rule: never mention competitor names"
-
-
-**Write content on demand:**
-- "Write a LinkedIn post about how AI helps sales teams save time"
-- "Based on today's Tech in Asia article, write a perspective piece from our angle"
-- "Prepare this month's lead outreach materials — one Email and one WhatsApp"
-
----
-
-## Folder Structure
-
-```
-content-intelligence/
-├── README.md
-├── skills/
-│   └── growth/
-│       └── content-intelligence/
-│           └── SKILL.md          ← Install this
-└── config-template/
-    └── env-template.txt
-```
+1. Create a bot via @BotFather and copy the bot token
+2. Add the bot to your team group or channel
+3. Note the Chat ID and Thread ID (if using topics)
+4. Add `TELEGRAM_BOT_TOKEN`, `CONTENT_TELEGRAM_CHAT_ID`, and `CONTENT_TELEGRAM_THREAD_ID` to `~/.hermes/.env`

@@ -1,11 +1,16 @@
 # Discussion & Todo Tracker — Config Template
+# Copy this block into ~/.hermes/.env and fill in your values.
+
+# Notion Integration
+NOTION_TOKEN=your_notion_integration_token_here
 
 # Internal Ops DB IDs (from Notion)
 DISCUSSIONS_DB_ID=your_internal_discussions_database_id_here
 TASKS_DB_ID=your_task_tracker_database_id_here
 
 # Business Core KB Page IDs (for auto-update function)
-# These are the same as your Core Business KB pages
+# These are the standalone Notion pages for your Business Core KB.
+# Find the ID in the page URL after the last dash: notion.so/Page-Title-<ID>
 BRAND_POSITIONING_PAGE_ID=your_brand_positioning_page_id_here
 TA_ANALYSIS_PAGE_ID=your_ta_analysis_page_id_here
 PRICING_BUSINESS_PAGE_ID=your_pricing_business_page_id_here

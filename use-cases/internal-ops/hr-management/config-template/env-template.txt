@@ -1,5 +1,5 @@
 # Notion
-NOTION_TOKEN=*** Notion integration token (from notion.so/my-integrations)
+NOTION_TOKEN=                         # Notion integration token (from notion.so/my-integrations)
 
 # HR Databases — get IDs from Notion URL (32-char hex after last /)
 HR_EMPLOYEES_DB=                      # Employee Directory DB ID
