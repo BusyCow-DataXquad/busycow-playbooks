@@ -10,7 +10,9 @@ Every piece of content this assistant produces is anchored to your brand positio
 
 - **Source Discovery** — recommends external blogs, news sites, and newsletters relevant to your business; presents candidates for your approval before adding anything
 - **Daily Topic Briefing** — every morning, scans active sources and delivers 3–5 specific topic suggestions with recommended format and angle; reply "Write #1" to start immediately
-- **Content Writing** — generates Blog posts, LinkedIn, Instagram, Facebook, Email campaigns, WhatsApp messages, and more; always loads the brand KB and Content Styling Guide first
+- **Content Writing** — generates any content format grounded in the company KB and Content Styling Guide:
+  - *Short-form* (Social Media, WhatsApp, LINE, Email): writes with a strong opening hook, auto-recommends relevant hashtags based on topic and platform
+  - *Long-form* (Blog, Article, Newsletter, Case Study): runs keyword research first, embeds SEO keywords naturally throughout, writes in-depth
 - **Content Styling Guide** — a Notion page where your brand's voice, format rules, SEO keywords, AEO targets, and platform-specific rules are defined; loaded automatically before every draft; updated via conversation
 
 ---
@@ -31,7 +33,7 @@ Every piece of content this assistant produces is anchored to your brand positio
 ### Step 1 — Copy config template
 
 ```bash
-cp use-cases/growth/content-intelligence/config-template/env-template.txt ~/.hermes/.env
+cp use-cases/sales-growth/content-intelligence/config-template/env-template.txt ~/.hermes/.env
 ```
 
 Open `~/.hermes/.env` and fill in whatever values you already know. Leave the rest blank — SETUP.md will guide the agent through finding or creating everything.
@@ -40,7 +42,7 @@ Open `~/.hermes/.env` and fill in whatever values you already know. Leave the re
 
 ```bash
 mkdir -p ~/.hermes/skills/growth/content-intelligence
-cp use-cases/growth/content-intelligence/SKILL.md ~/.hermes/skills/growth/content-intelligence/SKILL.md
+cp use-cases/sales-growth/content-intelligence/SKILL.md ~/.hermes/skills/growth/content-intelligence/SKILL.md
 ```
 
 ### Step 3 — Run the setup

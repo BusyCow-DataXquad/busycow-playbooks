@@ -145,6 +145,16 @@ Does this look right?
 
 If the request is clear (e.g. continuing from a briefing), skip clarification and proceed.
 
+### Step 1b — Detect content length tier
+
+Determine whether the content is short-form or long-form based on the format:
+
+**Short-form formats:** LinkedIn post, Instagram post, Facebook post, X/Twitter post, WhatsApp message, LINE message, short Email blast, SMS
+
+**Long-form formats:** Blog post, Article, Newsletter, Case Study, Whitepaper, Long-form LinkedIn article
+
+This affects Steps 3–4 — different writing rules apply.
+
 ### Step 2 — Load KB and Styling Guide
 
 Always load before writing. Use the IDs from agent memory.
@@ -168,11 +178,34 @@ If the user references a specific source or the topic came from the daily briefi
 
 ### Step 4 — Generate and present draft
 
-Rules:
-- Match the brand tone from the KB (no generic AI filler: "In today's fast-paced world...")
+### Rules — Short-form
+
+Apply when format is Social Post, WhatsApp, LINE, or short Email:
+
+- **Opening hook required** — start with one of: a bold statement, a surprising fact, a counter-intuitive question, or a relatable scenario. Never start with "In today's fast-paced world..."
+- Match platform length limits: LinkedIn ≤ 1,300 chars, Instagram ≤ 300 words, WhatsApp/LINE ≤ 200 words
+- **Auto-generate hashtag suggestions** based on topic, industry, and platform:
+  1. Check the Content Styling Guide for any pre-defined hashtag rules
+  2. Generate 3–8 relevant hashtags matching the topic and target platform
+  3. Present hashtags at the end of the draft, labeled: `Suggested hashtags:`
+  4. Note which platform the hashtags are optimized for
+- Structure: Hook → Value point → CTA (short and direct) → Hashtags
+- Ground all claims in KB — no invented stats or features
+
+### Rules — Long-form
+
+Apply when format is Blog, Article, Newsletter, or Case Study:
+
+- **Keyword research before writing:**
+  1. Check the Content Styling Guide for existing primary/secondary keywords
+  2. Web-search `[topic] [industry] SEO keywords` to find additional relevant terms
+  3. Identify 3–5 primary keywords and 3–5 secondary keywords
+  4. Plan keyword placement: title, first paragraph, at least one H2 heading, conclusion
+  5. Report keyword plan to user before generating: `📌 Keywords I'll embed: [list]`
+- **Minimum depth:** Blog post ≥ 1,200 words, Newsletter ≥ 600 words, Case Study ≥ 800 words
+- Structure: Hook intro → Problem framing → Solution / perspective → Evidence or examples from KB → Conclusion + CTA
+- Embed primary keywords naturally — no keyword stuffing. Secondary keywords appear in subheadings or supporting paragraphs
 - Ground all product or service claims in the KB — do not invent features
-- Include a clear CTA unless the format doesn't call for one
-- Output in the language specified (default: content language from agent memory)
 
 Present the draft:
 
@@ -197,6 +230,8 @@ Confirm to save to Content Library.
 After user confirmation (or "save it directly"):
 - Create a new page in the Content Library database with the content metadata as properties
 - Write the full content into the page body as Notion blocks
+- If the content was inspired by a source article: link the Source relation field to the corresponding Sources DB entry
+- For long-form content: save the embedded keyword list to the Keywords field
 - Use the title format: `[Type] — [Topic] — [YYYY-MM-DD]`
 - Set status to Draft unless the user specifies otherwise
 

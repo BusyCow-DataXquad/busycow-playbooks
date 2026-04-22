@@ -232,3 +232,8 @@ Stores all generated content drafts and published pieces. Content body is stored
 | Channel | Multi-select | Email / WhatsApp / LINE / LinkedIn / Instagram / etc. |
 | Status | Select | Draft / Ready / Archived |
 | Tags | Multi-select | Flexible — match client's content taxonomy |
+| Source | Relation | Links to the Sources DB entry that inspired this piece |
+| Publish Date | Date | When this piece was published or is scheduled to go live |
+| Keywords | Rich Text | SEO keywords embedded in this piece (long-form only) |
+
+> Note: The Source relation field links back to the Sources DB so the agent can trace which source article inspired each content piece.
