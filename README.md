@@ -13,11 +13,11 @@ busycow-playbooks/
 │
 ├── data-foundation/              ← Human reference only — schema docs and setup guides
 │   ├── core-business/            ← Business KB templates: brand, audience, offer, model, ops
-│   ├── growth/                   ← Growth data table reference: Accounts, Contacts, Deals, etc.
+│   ├── sales-growth/             ← Sales Growth data table reference: Accounts, Contacts, Deals, etc.
 │   └── internal-ops/             ← Internal data table reference: Discussions, Tasks, HR, Finance
 │
 ├── use-cases/                    ← Pick what the client needs — each is self-contained
-│   ├── growth/
+│   ├── sales-growth/
 │   │   ├── customer-relationship/
 │   │   │   ├── README.md         ← What it does, schema overview, example interactions
 │   │   │   ├── SETUP.md          ← Agent runs this once to set up the client's workspace
@@ -88,13 +88,13 @@ Every use case folder contains three files:
 
 ## Use Cases
 
-### Growth
+### Sales Growth
 
 | Use Case | What it does |
 |----------|-------------|
-| [Customer Relationship](./use-cases/growth/customer-relationship/) | Manage the full customer lifecycle from lead qualification to long-term retention — ICP scoring, rhythm-based follow-up, daily briefing, bulk outreach, business card import |
-| [Partner Management](./use-cases/growth/partner-management/) | Manage the full partner lifecycle from qualification to performance monitoring — onboarding tracking, monthly performance review, check-in reminders, co-marketing content matching |
-| [Content Intelligence](./use-cases/growth/content-intelligence/) | Monitor sources, extract insights, generate on-brand content, save to content library |
+| [Customer Relationship](./use-cases/sales-growth/customer-relationship/) | Manage the full customer lifecycle from lead qualification to long-term retention — ICP scoring, rhythm-based follow-up, daily briefing, bulk outreach, business card import |
+| [Partner Management](./use-cases/sales-growth/partner-management/) | Manage the full partner lifecycle from qualification to performance monitoring — onboarding tracking, monthly performance review, check-in reminders, co-marketing content matching |
+| [Content Intelligence](./use-cases/sales-growth/content-intelligence/) | Monitor sources, extract insights, generate on-brand content, save to content library |
 
 ### External Ops
 
