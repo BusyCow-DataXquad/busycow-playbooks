@@ -2,7 +2,7 @@
 name: content-intelligence
 description: >
   AI-powered content intelligence skill for Hermes Agent.
-  Reads the company's Core Business KB, discovers relevant external sources,
+  Reads the company's Core Business KB and Content Styling Guide, discovers relevant external sources,
   delivers daily topic suggestions alongside the CRM report, and generates
   on-brand content (Blog, Social Media, Email, WhatsApp) saved to Notion Content Library.
 version: 2.0.0
@@ -18,9 +18,10 @@ Three features, one consistent loop: find the right sources → get daily topic 
 
 1. **Source Discovery** — reads Core Business KB, recommends external sources worth tracking, saves to Sources DB after user approval
 2. **Daily Topic Briefing** — every morning at 9am, scans Active Sources + KB and delivers 3–5 actionable topic suggestions
-3. **Content Writing** — generates any format (Blog / Social / Email / WhatsApp) grounded in KB, saves to Content Library on confirm
+3. **Content Writing** — generates any format (Blog / Social / Email / WhatsApp) grounded in KB and Content Styling Guide, saves to Content Library on confirm
+4. **Content Styling Guide** — a document page defining brand voice, post format, platform rules, SEO keywords, AEO target questions, and special requirements; updated via conversation or directly; loaded automatically before every content draft
 
-The key rule: **every piece of content must be grounded in the company KB** — never write from scratch without referencing brand positioning and TA.
+The key rule: **every piece of content must be grounded in the company KB and Content Styling Guide** — never write from scratch without loading both.
 
 ---
 
@@ -174,17 +175,19 @@ Does this look right?
 
 If the request is clear enough (e.g. direct continuation from briefing), skip and go to Step 2.
 
-### Step 2 — Load KB
+### Step 2 — Load KB + Styling Guide
 
 Always load before writing:
 
 | Content Type | KB Sections to Load |
 |-------------|---------------------|
-| Blog / Long-form | Brand Positioning + TA + Product Overview |
-| Social Media | Brand Positioning + TA |
-| Cold Email | Brand Positioning + TA + Product Overview |
-| Follow-up | Brand Positioning + TA |
-| Case Study | Product Overview + Pricing |
+| Blog / Long-form | Brand Positioning + TA + Product Overview + Content Styling Guide |
+| Social Media | Brand Positioning + TA + Content Styling Guide |
+| Cold Email | Brand Positioning + TA + Product Overview + Content Styling Guide |
+| Follow-up | Brand Positioning + TA + Content Styling Guide |
+| Case Study | Product Overview + Pricing + Content Styling Guide |
+
+The Content Styling Guide is always loaded — it defines format, tone, platform rules, SEO/AEO targets, and special requirements that override general KB defaults.
 
 ### Step 3 — Pull Source Material (if applicable)
 
@@ -266,9 +269,77 @@ Confirm: `✅ Saved to Content Library — [Title] (Status: Draft)`
 
 ---
 
+## Feature 4 — Content Styling Guide
+
+### What it is
+
+A standalone Notion document page (not a database) that defines how the brand writes. The agent reads this page before every content draft. Users update it through conversation or by editing directly in Notion.
+
+### Page Structure
+
+```
+Content Styling Guide
+├── 1. Brand Voice & Tone
+│   ├── Overall style (e.g. Professional but approachable)
+│   ├── Preferred expressions
+│   ├── Words / phrases to avoid
+│   └── Target reader
+├── 2. Post Format Preferences
+│   ├── Preferred length
+│   ├── Structure style (bullets / paragraphs / mixed)
+│   ├── Opening hook style
+│   ├── Closing style
+│   ├── Emoji usage
+│   └── Hashtag usage
+├── 3. Platform-Specific Rules (table: Platform / Format Notes / Special Rules)
+├── 4. SEO Keywords
+│   ├── Primary keywords
+│   ├── Secondary keywords
+│   └── Keywords to avoid
+├── 5. AEO — AI Engine Optimization
+│   ├── Target questions (questions users ask AI assistants)
+│   ├── Authority topics
+│   └── Preferred answer format
+└── 6. Special Requirements
+    ├── Legal / compliance constraints
+    ├── Market / regional notes
+    └── Other custom rules
+```
+
+### Conversational Triggers
+
+- "Set up our content style — let's go through it together"
+- "Update our SEO keywords to include: AI agents, SME automation"
+- "Change our LinkedIn post length to under 200 words"
+- "Add a compliance rule: never mention competitor names"
+- "What are our current AEO target questions?"
+
+### Workflow — Guided Setup
+
+1. Load current Content Styling Guide page (if it exists)
+2. Walk through each section conversationally, one section at a time
+3. For each section, present current value (if any) and ask what to update
+4. After each answer, PATCH the relevant section in the Notion page
+5. Confirm each update: `✅ Updated: [Section] — [Summary of change]`
+
+### Workflow — Direct Update
+
+For targeted updates ("change our LinkedIn format to..."):
+1. Load the relevant section of the Content Styling Guide
+2. Apply the change to the Notion page
+3. Confirm: `✅ [Section] updated`
+
+### Behavioral Rules for this Feature
+
+- Always confirm before overwriting existing values — show current value and ask if replacing
+- If the guide doesn't exist yet, offer to create it from scratch using the standard template
+- When a user asks for content without a Styling Guide set up, note it and offer to set one up after the current piece
+
+---
+
 ## Behavioral Rules
 
-1. **Always load KB before writing** — brand positioning and TA must be loaded first
+1. **Always load KB + Content Styling Guide before writing** — brand positioning, TA, and styling guide must all be loaded first
 2. **No hallucinated product claims** — if the KB doesn't mention it, don't make it up
 3. **Sources = inspiration, not copy-paste** — always rewrite in brand voice
 4. **Show draft, get confirm before saving** — unless user says "save it directly"
@@ -293,6 +364,9 @@ KB_PRODUCT_PAGE_ID=                  # Product/service overview
 # Notion Databases
 SOURCES_DB=                          # Sources DB ID
 CONTENT_LIBRARY_DB=                  # Content Library DB ID
+
+# Content Styling Guide (standalone Notion page — not a database)
+CONTENT_STYLING_GUIDE_PAGE_ID=       # Content Styling Guide page ID
 
 # Telegram (for briefings)
 CONTENT_TELEGRAM_CHAT_ID=            # e.g. -100XXXXXXXXX

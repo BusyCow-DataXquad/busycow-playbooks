@@ -1,6 +1,6 @@
 # Content Intelligence — Use Case
 
-An AI-powered content system that helps you find the right sources, get daily topic suggestions, and generate on-brand content — all grounded in your company's knowledge base and saved automatically to Notion.
+An AI-powered content system that helps you find the right sources, get daily topic suggestions, generate on-brand content, and maintain a consistent brand style — all grounded in your company's knowledge base and saved automatically to Notion.
 
 **Category:** Growth
 **Data Foundation Required:** [Growth](../../data-foundation/growth/README.md) — Content Library only
@@ -16,7 +16,18 @@ Reads your Core Business KB (brand positioning, TA, industry focus) and recommen
 Every morning at 9am (alongside the Daily CRM Report), the agent scans Active Sources for fresh articles, cross-references your brand KB and target audience, then delivers 3–5 specific topic suggestions — each with a recommended format and angle. Reply "Write #1" to start writing immediately.
 
 ### Feature 3 — Content Writing
-Generate any type of content through natural conversation: long-form Blog posts, Social Media posts (LinkedIn, IG, Facebook), Email campaigns, WhatsApp messages, and more. The agent always references the brand KB to ensure tone and positioning consistency. All confirmed content is saved to the Content Library with metadata.
+Generate any type of content through natural conversation: long-form Blog posts, Social Media posts (LinkedIn, IG, Facebook), Email campaigns, WhatsApp messages, and more. The agent always references the brand KB and Content Styling Guide to ensure tone and positioning consistency. All confirmed content is saved to the Content Library with metadata.
+
+### Feature 4 — Content Styling Guide
+A standalone document page where you define how your brand writes. Fill it in through conversation with the agent or edit it directly. The agent loads it automatically whenever drafting content.
+
+Covers:
+- **Brand voice & tone** — overall style, preferred expressions, words to avoid, target reader
+- **Post format preferences** — length, structure, opening/closing style, emoji and hashtag usage
+- **Platform-specific rules** — per-platform format and special rules (LinkedIn, Facebook, Instagram, Blog, etc.)
+- **SEO keywords** — primary, secondary, and keywords to avoid
+- **AEO (AI Engine Optimization)** — target questions for AI assistants, authority topics, preferred answer format
+- **Special requirements** — legal/compliance constraints, regional considerations, custom rules
 
 ---
 
@@ -48,7 +59,7 @@ Install these tables from `data-foundation/growth/` before activating this use c
 
 ## Required Knowledge Base
 
-This use case reads from your Core Business KB to generate on-brand content.
+This use case reads from your Core Business KB and Content Styling Guide to generate on-brand content.
 Ensure the following are filled in and accessible:
 
 | KB Document | Why It's Needed |
@@ -56,8 +67,11 @@ Ensure the following are filled in and accessible:
 | Brand Identity | Sets tone, voice, and positioning for all content |
 | Target Audience | Informs who the content is written for |
 | Offer | Grounds product/service mentions in accurate detail |
+| Content Styling Guide | Defines post format, platform rules, SEO/AEO keywords, and special requirements |
 
 See `data-foundation/core-business/` for setup instructions.
+
+> **Content Styling Guide** is a standalone Notion page (not a database). Create it once and share it with your Hermes integration. Users can update it anytime through conversation or by editing directly.
 
 ---
 
@@ -110,6 +124,13 @@ hermes cron create \
 - "Write #1"
 - "Write #2, but make it Email format"
 - "Save #3 as a draft title — I'll write it next week"
+
+**Set up Content Styling Guide:**
+- "Set up our content style — let's go through it together"
+- "Update our SEO keywords to include: AI agents, SME automation"
+- "Change our LinkedIn post length preference to under 200 words"
+- "Add a compliance rule: never mention competitor names"
+
 
 **Write content on demand:**
 - "Write a LinkedIn post about how AI helps sales teams save time"

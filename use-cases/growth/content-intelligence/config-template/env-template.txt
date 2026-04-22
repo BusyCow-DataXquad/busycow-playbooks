@@ -18,6 +18,9 @@ KB_PRODUCT_PAGE_ID=your_product_overview_page_id
 # Content Library
 CONTENT_LIBRARY_DB=your_content_library_database_id
 
+# Content Styling Guide (standalone Notion page — not a database)
+CONTENT_STYLING_GUIDE_PAGE_ID=your_content_styling_guide_page_id
+
 # Content Defaults
 CONTENT_LANGUAGE=zh-TW         # Default output language: zh-TW / en / etc.
 BRAND_TONE=professional         # Tone: professional / friendly / technical / casual
